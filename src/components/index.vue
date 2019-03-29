@@ -31,6 +31,7 @@
                   :data="tableData"
                   :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                   border
+                  @row-click="doSeeCurve"
                   highlight-current-row
                   style="width: 98%;margin: auto">
           <template v-for="(col ,index) in cols">
@@ -47,7 +48,8 @@
       :yData="yData"
       :isHideCurve="isHideCurve"
       :name="name"
-      v-on:modalClose="modalClose"></Curve>
+      v-on:modalClose="modalClose"
+      v-on:doSearchData="doSearchData"></Curve>
     <Modal :msg="message"
            :isHideModal="HideModal"></Modal>
     <div class="loading-container" v-show="!img">
@@ -76,6 +78,7 @@
 
 
         img: "",
+        tag:"",
 
         select: "",
         selectOptions: [],
@@ -86,14 +89,7 @@
 
         name:"dddddddd",
         xData:['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
-        yData:[
-          {
-            name:'当前时间段数据',
-            type:'line',
-            smooth:true,
-            data:[3501, 2501, 3515, 3585, 2900, 3530, 2510,3501, 2501, 3515, 3585, 2200, 3530, 2510,3501, 2501, 3515, 3585, 2500, 3530, 2510,3501, 2501,3501,],
-          }
-        ]
+        yData:[3501, 2501, 3515, 3585, 2900, 3530, 2510,3501, 2501, 3515, 3585, 2200, 3530, 2510,3501, 2501, 3515, 3585, 2500, 3530, 2510,3501, 2501,3501,]
       }
 
     },
@@ -153,10 +149,44 @@
       },
 
 
-      //关闭消息页面
+      //关闭曲线页面
       modalClose(val) {
         this.isHideCurve = val;
       },
+
+      doSeeCurve(row, column, event) {
+        this.tag = row.id;
+        if (this.tag) {
+
+        }
+        else {
+
+        }
+
+
+      },
+
+
+      //根据数据进行曲线查询
+      doSearchData(val) {
+        if (val) {
+          axios.post(" " + realTimeUrl + "/api/getRealTimeCure.ashx", {
+            "startTime": val.startTime,
+            "endTime": val.endTime
+          })
+            .then((res) => {
+              this.xData = res.data.xData;
+              this.yData = res.data.yData;
+              this.name = res.data.name;
+              this.isHideCurve = true;
+            })
+            .catch((err) => {
+              console.log(err)
+            });
+          console.log(val)
+        }
+      },
+
 
 
       //改变下拉显示数据

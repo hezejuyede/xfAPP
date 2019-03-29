@@ -11,6 +11,7 @@
               style="width: 300px"
               v-model="startTime"
               type="datetime"
+              value-format="yyyy-MM-dd hh:mm:ss"
               placeholder="开始时间">
             </el-date-picker>
           </div>
@@ -19,6 +20,7 @@
               style="width: 300px"
               v-model="endTime"
               type="datetime"
+              value-format="yyyy-MM-dd hh:mm:ss"
               placeholder="结束时间">
             </el-date-picker>
           </div>
@@ -51,8 +53,15 @@
     },
     watch: {
       excelData: {
-        handler(newValue, oldValue) {
+        xData(newValue, oldValue) {
           if (newValue === true) {
+
+
+          }
+        },
+        yData(newValue, oldValue) {
+          if (newValue === true) {
+
 
           }
         },
@@ -106,7 +115,14 @@
               type: 'value'
             }
           ],
-          series: this.yData
+          series: [
+            {
+              name:'当前时间段数据',
+              type:'line',
+              smooth:true,
+              data:this.yData
+            }
+          ]
         });
       },
 
@@ -116,8 +132,11 @@
       },
 
       doSearchCurve() {
-        let flag = true;
-        this.$emit('importDataClose', flag);
+        let flag = {
+          "startTime":this.startTime,
+          "endTime":this.endTime
+        };
+        this.$emit('doSearchData', flag);
       }
     },
     props: ['xData','yData', 'isHideCurve','name']
