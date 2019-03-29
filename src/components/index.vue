@@ -82,9 +82,7 @@
       this.showSearch();
       this.bianse();
     },
-    computed: {
-
-    },
+    computed: {},
     created() {
       //检索用户状态
       this.getAdminState();
@@ -121,7 +119,7 @@
         else {
           let that = this;
           axios.all([
-            axios.post(" " + realTimeUrl + "/api/getRealTimeSelect.ashx", {"id": ""}),
+            axios.post(" " + realTimeUrl + "/api/getRealTimeSelect.ashx", {"id": "1"}),
           ])
             .then(axios.spread(function (select) {
               that.select = select.data[0].id;
@@ -141,10 +139,12 @@
           this.message = "下拉选择不能为空";
           this.HideModal = false;
           const that = this;
+
           function a() {
             that.message = "";
             that.HideModal = true;
           }
+
           setTimeout(a, 2000);
 
         }
@@ -159,38 +159,15 @@
           this.message = "下拉选择不能为空";
           this.HideModal = false;
           const that = this;
+
           function a() {
             that.message = "";
             that.HideModal = true;
           }
+
           setTimeout(a, 2000);
 
         }
-      },
-
-      //选择
-      selectList(val) {
-        if (val.length) {
-          let data = [];
-          for (let i = 0; i < val.length; i++) {
-            let a = val[i].id;
-            data.push(a)
-          }
-          this.listData = data;
-        }
-      },
-
-      //全选
-      selectAll(val) {
-        if (val.length) {
-          let data = [];
-          for (let i = 0; i < val.length; i++) {
-            let a = val[i].id;
-            data.push(a)
-          }
-          this.listData = data;
-        }
-
       },
 
 

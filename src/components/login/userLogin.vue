@@ -123,7 +123,7 @@
       //进行登陆
       login() {
         if (this.userNameState === true && this.passwordState === true) {
-          axios.post(" " + url + "/api/userLogin",
+          axios.post(" " + url + "/node/userLogin",
             {
               "username": this.username,
               "password": this.password

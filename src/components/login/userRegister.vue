@@ -199,7 +199,7 @@
       },
       register() {
         if (this.userNameState === true && this.passwordState === true && this.passwordState2 === true && this.codeState === true) {
-          axios.post("/api/userRegister", {
+          axios.post("/node/userRegister", {
             username: this.username,
             password: this.password,
             code:this.code
