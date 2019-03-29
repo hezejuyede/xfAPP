@@ -1,11 +1,12 @@
 <template>
   <div id="register-page">
+    <back></back>
     <div class="register-page-div">
       <header class="login-title">
       </header>
       <div class="register">
         <div class="register-top">
-          注册管理员用户
+          注册用户
         </div>
         <div class="register-bottom">
           <div class="register-bottom-template">
@@ -65,7 +66,7 @@
                 @focus="verificationCodeFocus(code)"
                 v-model="code"
                 type="text"
-                placeholder="请输入管理员注册码"/>
+                placeholder="请输入注册码"/>
             </div>
             <div class="codeText">
               <span>{{codeErrText}}</span>
@@ -74,7 +75,7 @@
           <button @click="register">点击注册</button>
         </div>
       </div>
-      <footer class=""> ©2018 四川广安发电有限责任公司</footer>
+      <footer class=""> {{registerFooter}}</footer>
     </div>
     <Modal :msg="message"
            :isHideModal="HideModal"></Modal>
@@ -88,12 +89,14 @@
   import 'element-ui/lib/theme-chalk/index.css';
   import Modal from '../../common/modal'
   import Loading from '../../common/loading';
+  import Back from '../../common/back';
 
   export default {
     name: 'register',
     data() {
       return {
         img: '',
+        registerFooter:"湖北兴发化工集团股份有限公司",
 
         message: '',
         HideModal: true,
@@ -116,7 +119,7 @@
         codeState:false
       };
     },
-    components: {Modal,Loading},
+    components: {Modal,Loading,Back},
     mounted() {
 
     },
@@ -215,7 +218,7 @@
 
                 setTimeout(a, 2000);
               }
-              else if (res.data === "2") {
+              else if (res.data === "-1") {
                 this.message = "该用户已经注册";
                 this.HideModal = false;
                 const that = this;
@@ -229,7 +232,7 @@
 
                 setTimeout(b, 2000);
               }
-              else if (res.data === "-1") {
+              else if (res.data === "-3") {
                 this.message = "注册失败";
                 this.HideModal = false;
                 const that = this;
@@ -246,13 +249,13 @@
                 this.message = "管理员注册码错误";
                 this.HideModal = false;
                 const that = this;
-                function c() {
+                function d() {
                   that.message = "";
                   that.HideModal = true;
                   that.password = '';
                 }
 
-                setTimeout(c, 2000);
+                setTimeout(d, 2000);
               }
             })
             .catch((err) => {
@@ -283,6 +286,8 @@
   #register-page {
     width: 100%;
     position: absolute;
+    background: url("../../assets/img/register.jpg") center center;
+    background-size: cover;
     max-width: 640px;
     margin: auto;
     top: 0;
@@ -375,7 +380,7 @@
           font-size: @font-size-medium;
           text-align: center;
           line-height: 35px;
-          border-radius: 5%;
+          border-radius: 15px;
           border: 0;
         }
       }
