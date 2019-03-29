@@ -1,5 +1,9 @@
 <template>
   <div class="template">
+    <Curve
+      :xData="xData"
+      :yData="yData"
+      :isHideCurve="isHideCurve"></Curve>
     <header-nav></header-nav>
     <div class="contentDiv">
       <div class="contentTop" ref="contentTop">
@@ -39,6 +43,11 @@
         </el-table>
       </div>
     </div>
+
+
+    <!--查看曲线 -->
+
+
     <div class="upTop" ref="upTop" @click="upToTop">
       <i class="iconfont icon-xiangshang1"></i>
     </div>
@@ -57,6 +66,8 @@
   import footerNav from '../common/footer'
   import Loading from '../common/loading'
   import Modal from '../common/modal'
+  import Curve from '../common/curve'
+
 
   export default {
     name: 'ProductionExecution',
@@ -64,6 +75,9 @@
       return {
         message: '',
         HideModal: true,
+        isHideCurve:false,
+
+        curveVisible:true,
 
         img: "",
 
@@ -72,10 +86,28 @@
 
         tableData: [],
         cols: [],
+
+
+
+        xData:['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
+        yData:[
+          {
+            name:'昨日',
+            type:'line',
+            smooth:true,
+            data:[3001, 2001, 3015, 3085, 2600, 3830, 2710,3001, 2001, 3015, 3085, 2600, 3830, 2710,3001, 2001, 3015, 3085, 2600, 3830, 2710,3001, 2001,3001,],
+          },
+          {
+            name:'今日',
+            type:'line',
+            smooth:true,
+            data:[3501, 2501, 3515, 3585, 2900, 3530, 2510,3501, 2501, 3515, 3585, 2200, 3530, 2510,3501, 2501, 3515, 3585, 2500, 3530, 2510,3501, 2501,3501,],
+          }
+        ]
       }
 
     },
-    components: {Loading, footerNav, Modal, headerNav},
+    components: {Loading, footerNav, Modal, headerNav,Curve},
     mounted() {
       this.showUp();
       this.showSearch();
@@ -90,6 +122,8 @@
       setTimeout(() => {
         this.getLoading();
       }, 1000);
+
+
     },
     methods: {
       //旋转的图片
@@ -168,6 +202,8 @@
 
         }
       },
+
+
 
 
       //移动显示搜索框
@@ -301,36 +337,10 @@
   }
 
   .container {
-    .containerDiv {
-      width: 95%;
-      height: 70%;
-      margin: 0 auto;
-      .select {
-        width: 16%;
-        height: 50px;
-        margin-left: 0.6%;
-        .el-select {
-          width: 100%;
-          font-size: 12px;
-        }
+    width: 100%;
+    height: 100%;
+    background-color: #d93f30;
 
-      }
-    }
-    .containerBtn {
-      height: 20%;
-      width: 95%;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .el-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 20%;
-        height: 35px;
-      }
-    }
 
   }
 

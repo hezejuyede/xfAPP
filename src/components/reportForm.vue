@@ -72,6 +72,7 @@
 
         tableData: [],
         cols: [],
+
       }
 
     },
@@ -80,6 +81,7 @@
       this.showUp();
       this.showSearch();
       this.bianse();
+
     },
     computed: {
 
@@ -230,6 +232,8 @@
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
       },
+
+
 
 
     }
