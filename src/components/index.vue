@@ -74,11 +74,11 @@
       return {
         message: '',
         HideModal: true,
-        isHideCurve:false,
+        isHideCurve: false,
 
 
         img: "",
-        tag:"",
+        tag: "",
 
         select: "",
         selectOptions: [],
@@ -87,13 +87,13 @@
         cols: [],
 
 
-        name:"dddddddd",
-        xData:['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
-        yData:[3501, 2501, 3515, 3585, 2900, 3530, 2510,3501, 2501, 3515, 3585, 2200, 3530, 2510,3501, 2501, 3515, 3585, 2500, 3530, 2510,3501, 2501,3501,]
+        name: "dddddddd",
+        xData: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],
+        yData: [3501, 2501, 3515, 3585, 2900, 3530, 2510, 3501, 2501, 3515, 3585, 2200, 3530, 2510, 3501, 2501, 3515, 3585, 2500, 3530, 2510, 3501, 2501, 3501,]
       }
 
     },
-    components: {Loading, footerNav, Modal, headerNav,Curve},
+    components: {Loading, footerNav, Modal, headerNav, Curve},
     mounted() {
       this.showUp();
       this.showSearch();
@@ -157,7 +157,18 @@
       doSeeCurve(row, column, event) {
         this.tag = row.id;
         if (this.tag) {
-
+          axios.post(" " + realTimeUrl + "/api/getNowRealTimeCure.ashx", {
+            "tag": this.tag
+          })
+            .then((res) => {
+              this.xData = res.data.xData;
+              this.yData = res.data.yData;
+              this.name = res.data.name;
+              this.isHideCurve = true;
+            })
+            .catch((err) => {
+              console.log(err)
+            });
         }
         else {
 
@@ -183,10 +194,8 @@
             .catch((err) => {
               console.log(err)
             });
-          console.log(val)
         }
       },
-
 
 
       //改变下拉显示数据
@@ -363,7 +372,6 @@
     width: 100%;
     height: 100%;
     background-color: #d93f30;
-
 
   }
 
