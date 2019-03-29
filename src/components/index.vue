@@ -120,7 +120,7 @@
       getAdminState() {
         const userInfo = sessionStorage.getItem("userInfo");
         if (userInfo === null) {
-          this.$router.push("/userLogin")
+          this.$router.push("/UserLogin")
         }
         else {
           let that = this;

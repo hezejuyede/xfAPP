@@ -33,7 +33,10 @@
           </div>
         </div>
         <div class="loginIndex-login">
-          <button @click="login">登录</button>
+          <div class="" style="width:100%;display: flex;align-items: center;justify-content: center;flex-direction: column">
+            <button @click="login">登录</button>
+            <span style="margin-top: 10px;color: #d93f30;font-size: 20px" @click="goToRegister">用户注册</span>
+          </div>
         </div>
       </div>
     </div>
@@ -110,6 +113,11 @@
         if (password.length === 0) {
           this.passwordErrText = "请填写密码";
         }
+      },
+
+      //前往注册页面
+      goToRegister(){
+        this.$router.push("/UserRegister");
       },
 
       //进行登陆

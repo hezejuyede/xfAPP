@@ -3,8 +3,9 @@ import Router from 'vue-router'
 
 
 import Index from '../components/index'
-import userLogin from '../components/login/userLogin'
-import YX from '../components/yx'
+import UserLogin from '../components/login/userLogin'
+import UserRegister from '../components/login/userRegister'
+import ReportForm from '../components/reportForm'
 
 Vue.use(Router)
 
@@ -16,14 +17,19 @@ export default new Router({
       component: Index
     },
     {
-        path: '/userLogin',
-      name: 'userLogin',
-      component: userLogin
+      path: '/UserLogin',
+      name: 'UserLogin',
+      component: UserLogin
     },
     {
-      path: '/YX',
-      name: 'YX',
-      component: YX
+      path: '/UserRegister',
+      name: 'UserRegister',
+      component: UserRegister
+    },
+    {
+      path: '/ReportForm',
+      name: 'ReportForm',
+      component: ReportForm
     }
   ]
 })

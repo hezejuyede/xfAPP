@@ -14,7 +14,7 @@
       num: Number,
       navBar: [
         {"icon": "iconfont icon-shuju", "text": "数据", "url": "/"},
-        {"icon": "iconfont icon-huabanfuben", "text": "报表", "url": "/YX"}
+        {"icon": "iconfont icon-huabanfuben", "text": "报表", "url": "/ReportForm"}
       ]
     }
   },
