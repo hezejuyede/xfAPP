@@ -205,7 +205,10 @@
             code:this.code
           })
             .then((res) => {
-              if (res.data === "1") {
+              if (res.data.state === "1") {
+                let userInfo = res.data;
+                userInfo = JSON.stringify(userInfo);
+                sessionStorage.setItem("userInfo", userInfo);
                 this.message = "注册成功";
                 this.HideModal = false;
                 const that = this;
@@ -213,7 +216,7 @@
                 function a() {
                   that.message = "";
                   that.HideModal = true;
-                  that.$router.push({path: "/IndexLogin"})
+                  that.$router.push({path: "/"})
                 }
 
                 setTimeout(a, 2000);
@@ -286,7 +289,7 @@
   #register-page {
     width: 100%;
     position: absolute;
-    background: url("../../assets/img/register.jpg") center center;
+    background: url("../../assets/img/bg.jpg") center center;
     background-size: cover;
     max-width: 640px;
     margin: auto;
@@ -375,7 +378,7 @@
           width: 80%;
           margin: 0 auto;
           height: 35px;
-          background-color: @color-green;
+          background-color: #409EFF;;
           color: @color-white;
           font-size: @font-size-medium;
           text-align: center;
@@ -400,6 +403,7 @@
       text-align: center;
       margin-top: 20px;
       font-size: @font-size-medium-x;
+      color: @color-white;
     }
   }
 
