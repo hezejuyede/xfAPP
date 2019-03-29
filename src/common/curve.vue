@@ -4,10 +4,9 @@
       <div class="container">
         <div class="containerTop">
           <div class="containerTopDiv">
-            <el-button type="danger">关闭窗口</el-button>
+            <el-button type="danger" @click="closeModal">关闭窗口</el-button>
           </div>
           <div class="containerTopDiv">
-
             <el-date-picker
               style="width: 300px"
               v-model="startTime"
@@ -24,7 +23,7 @@
             </el-date-picker>
           </div>
           <div class="containerTopDiv">
-            <el-button type="primary">查询曲线</el-button>
+            <el-button type="primary" @click="doSearchCurve()">查询曲线</el-button>
           </div>
         </div>
         <div class="containerBottom">
@@ -69,49 +68,59 @@
 
         // 绘制图表
         myChart.setOption({
-          title : {
-            text: '负荷',
+          title: {
+            text: this.name,
             subtext: '实时显示'
           },
-          tooltip : {
+          tooltip: {
             trigger: 'axis'
           },
           legend: {
-            data:['昨日','今日']
+            data: ['当前时间段数据']
           },
-          grid:{
-            x:40,
-            borderWidth:1,
-            x2:10,
-            y2:30
+          grid: {
+            x: 40,
+            borderWidth: 1,
+            x2: 10,
+            y2: 30
           },
 
           toolbox: {
-            show : true,
-            feature : {
-              mark : {show: true},
-              magicType : {show: true, type: ['line', 'bar']},
-              restore : {show: true},
+            show: true,
+            feature: {
+              mark: {show: true},
+              magicType: {show: true, type: ['line', 'bar']},
+              restore: {show: true},
             }
           },
-          calculable : true,
-          xAxis : [
+          calculable: true,
+          xAxis: [
             {
-              type : 'category',
-              boundaryGap : false,
-              data :this.xData
+              type: 'category',
+              boundaryGap: false,
+              data: this.xData
             }
           ],
-          yAxis : [
+          yAxis: [
             {
-              type : 'value'
+              type: 'value'
             }
           ],
-          series :this.yData
+          series: this.yData
         });
       },
+
+      closeModal() {
+        let flag = true;
+        this.$emit('modalClose', flag);
+      },
+
+      doSearchCurve() {
+        let flag = true;
+        this.$emit('importDataClose', flag);
+      }
     },
-    props: ['xData','yData', 'isHideCurve']
+    props: ['xData','yData', 'isHideCurve','name']
   }
 </script>
 <style scoped lang="less" rel="stylesheet/less">

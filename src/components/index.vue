@@ -1,9 +1,5 @@
 <template>
   <div class="template">
-    <Curve
-      :xData="xData"
-      :yData="yData"
-      :isHideCurve="isHideCurve"></Curve>
     <header-nav></header-nav>
     <div class="contentDiv">
       <div class="contentTop" ref="contentTop">
@@ -43,14 +39,15 @@
         </el-table>
       </div>
     </div>
-
-
-    <!--查看曲线 -->
-
-
     <div class="upTop" ref="upTop" @click="upToTop">
       <i class="iconfont icon-xiangshang1"></i>
     </div>
+    <Curve
+      :xData="xData"
+      :yData="yData"
+      :isHideCurve="isHideCurve"
+      :name="name"
+      v-on:modalClose="modalClose"></Curve>
     <Modal :msg="message"
            :isHideModal="HideModal"></Modal>
     <div class="loading-container" v-show="!img">
@@ -77,7 +74,6 @@
         HideModal: true,
         isHideCurve:false,
 
-        curveVisible:true,
 
         img: "",
 
@@ -88,17 +84,11 @@
         cols: [],
 
 
-
+        name:"dddddddd",
         xData:['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
         yData:[
           {
-            name:'昨日',
-            type:'line',
-            smooth:true,
-            data:[3001, 2001, 3015, 3085, 2600, 3830, 2710,3001, 2001, 3015, 3085, 2600, 3830, 2710,3001, 2001, 3015, 3085, 2600, 3830, 2710,3001, 2001,3001,],
-          },
-          {
-            name:'今日',
+            name:'当前时间段数据',
             type:'line',
             smooth:true,
             data:[3501, 2501, 3515, 3585, 2900, 3530, 2510,3501, 2501, 3515, 3585, 2200, 3530, 2510,3501, 2501, 3515, 3585, 2500, 3530, 2510,3501, 2501,3501,],
@@ -135,7 +125,7 @@
         let that = this;
         axios.all([
           axios.post(" " + realTimeUrl + "/api/showTableTitle.ashx", {"name": "realTime"}),
-          axios.post(" " + realTimeUrl + "/api/showContextList.ashx", {"id": this.select})
+          axios.post(" " + realTimeUrl + "/api/showContextList.ashx", {"id": data})
         ])
           .then(axios.spread(function (title, table) {
             that.cols = title.data;
@@ -152,7 +142,7 @@
         else {
           let that = this;
           axios.all([
-            axios.post(" " + realTimeUrl + "/api/getRealTimeSelect.ashx", {"id": "1"}),
+            axios.post(" " + realTimeUrl + "/api/getRealTimeSelect.ashx"),
           ])
             .then(axios.spread(function (select) {
               that.select = select.data[0].id;
@@ -160,6 +150,12 @@
               that.loadingShowData(1);
             }));
         }
+      },
+
+
+      //关闭消息页面
+      modalClose(val) {
+        this.isHideCurve = val;
       },
 
 
@@ -202,9 +198,6 @@
 
         }
       },
-
-
-
 
       //移动显示搜索框
       showSearch() {
