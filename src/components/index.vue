@@ -12,7 +12,7 @@
               allow-create
               default-first-option
               @change="changeSelect"
-              placeholder="请输入或者选择变电站">
+              placeholder="请选择查询的数据">
               <el-option
                 v-for="item in selectOptions"
                 :key="item.id"
@@ -31,13 +31,8 @@
                   :data="tableData"
                   :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                   border
-                  @select="selectList"
                   highlight-current-row
                   style="width: 98%;margin: auto">
-          <el-table-column
-            type="selection"
-            width="30">
-          </el-table-column>
           <template v-for="(col ,index) in cols">
             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
           </template>
@@ -58,6 +53,7 @@
 <script type="text/ecmascript-6">
   import axios from 'axios'
   import url from '../assets/js/URL'
+  import realTimeUrl from '../assets/js/realTimeUrl'
   import headerNav from '../common/header'
   import footerNav from '../common/footer'
   import Loading from '../common/loading'
@@ -107,8 +103,8 @@
       loadingShowData(data) {
         let that = this;
         axios.all([
-          axios.post(" " + url + "/api/showTableTitle", {"name": "yc"}),
-          axios.post(" " + url + "/api/showContextList", {"id": this.select})
+          axios.post(" " + realTimeUrl + "/api/showTableTitle.ashx", {"name": "yc"}),
+          axios.post(" " + realTimeUrl + "/api/showContextList.ashx", {"id": this.select})
         ])
           .then(axios.spread(function (title, table) {
             that.cols = title.data;
@@ -125,7 +121,7 @@
         else {
           let that = this;
           axios.all([
-            axios.post(" " + url + "/api/getSelect", {"id": ""}),
+            axios.post(" " + realTimeUrl + "/api/getRealTimeSelect.ashx", {"id": ""}),
           ])
             .then(axios.spread(function (select) {
               that.select = select.data[0].id;
