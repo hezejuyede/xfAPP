@@ -12,7 +12,7 @@
               allow-create
               default-first-option
               @change="changeSelect"
-              placeholder="请输入或者选择变电站">
+              placeholder="选择查看的报表">
               <el-option
                 v-for="item in selectOptions"
                 :key="item.id"
@@ -31,13 +31,8 @@
                   :data="tableData"
                   :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                   border
-                  @select="selectList"
                   highlight-current-row
                   style="width: 98%;margin: auto">
-          <el-table-column
-            type="selection"
-            width="30">
-          </el-table-column>
           <template v-for="(col ,index) in cols">
             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
           </template>
@@ -57,7 +52,7 @@
 </template>
 <script type="text/ecmascript-6">
   import axios from 'axios'
-  import url from '../assets/js/URL'
+  import realTimeUrl from '../assets/js/realTimeUrl'
   import headerNav from '../common/header'
   import footerNav from '../common/footer'
   import Loading from '../common/loading'
@@ -107,8 +102,8 @@
       loadingShowData(data) {
         let that = this;
         axios.all([
-          axios.post(" " + url + "/api/showTableTitle", {"name": "yx"}),
-          axios.post(" " + url + "/api/showContextList", {"id": this.select})
+          axios.post(" " + realTimeUrl + "/api/showTableTitle.ashx", {"name": "reportForm"}),
+          axios.post(" " + realTimeUrl + "/api/showContextList.ashx", {"id": this.select})
         ])
           .then(axios.spread(function (title, table) {
             that.cols = title.data;
@@ -125,7 +120,7 @@
         else {
           let that = this;
           axios.all([
-            axios.post(" " + url + "/api/getSelect", {"id": ""}),
+            axios.post(" " + realTimeUrl + "/api/getSelectReportForm.ashx", {"id": ""}),
           ])
             .then(axios.spread(function (select) {
               that.select = select.data[0].id;
@@ -172,30 +167,7 @@
         }
       },
 
-      //选择
-      selectList(val) {
-        if (val.length) {
-          let data = [];
-          for (let i = 0; i < val.length; i++) {
-            let a = val[i].id;
-            data.push(a)
-          }
-          this.listData = data;
-        }
-      },
 
-      //全选
-      selectAll(val) {
-        if (val.length) {
-          let data = [];
-          for (let i = 0; i < val.length; i++) {
-            let a = val[i].id;
-            data.push(a)
-          }
-          this.listData = data;
-        }
-
-      },
 
 
       //移动显示搜索框

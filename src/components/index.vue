@@ -52,7 +52,6 @@
 </template>
 <script type="text/ecmascript-6">
   import axios from 'axios'
-  import url from '../assets/js/URL'
   import realTimeUrl from '../assets/js/realTimeUrl'
   import headerNav from '../common/header'
   import footerNav from '../common/footer'
@@ -101,7 +100,7 @@
       loadingShowData(data) {
         let that = this;
         axios.all([
-          axios.post(" " + realTimeUrl + "/api/showTableTitle.ashx", {"name": "yc"}),
+          axios.post(" " + realTimeUrl + "/api/showTableTitle.ashx", {"name": "realTime"}),
           axios.post(" " + realTimeUrl + "/api/showContextList.ashx", {"id": this.select})
         ])
           .then(axios.spread(function (title, table) {
