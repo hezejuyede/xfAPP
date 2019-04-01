@@ -56,7 +56,7 @@
                 style="width: 300px"
                 v-model="startTime"
                 type="datetime"
-                value-format="yyyy-MM-dd hh:mm:ss"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="开始时间">
               </el-date-picker>
             </div>
@@ -65,7 +65,7 @@
                 style="width: 300px"
                 v-model="endTime"
                 type="datetime"
-                value-format="yyyy-MM-dd hh:mm:ss"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="结束时间">
               </el-date-picker>
             </div>
