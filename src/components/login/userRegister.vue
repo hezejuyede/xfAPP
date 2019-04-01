@@ -96,7 +96,7 @@
     data() {
       return {
         img: '',
-        loginTitle:"Pi实时数据库监控系统",
+        loginTitle:"PI实时数据分析系统",
         registerFooter:"湖北兴发化工集团股份有限公司",
 
         message: '',

@@ -30,13 +30,33 @@
       <div class="contentBottom">
         <el-table class="tb-edit"
                   :data="tableData"
-                  :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
+                  :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'18px'}"
+                  :cell-style="{fontSize:'12px'}"
                   border
                   @row-click="doSeeCurve"
                   highlight-current-row
                   style="width: 98%;margin: auto">
           <template v-for="(col ,index) in cols">
-            <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+            <el-table-column
+              align="center"
+              v-if="col.prop =='Name'"
+              width="130"
+              :prop="col.prop"
+              :label="col.label">
+            </el-table-column>
+            <el-table-column
+              align="center"
+              v-if="col.prop =='Value'"
+              width="70"
+              :prop="col.prop"
+              :label="col.label">
+            </el-table-column>
+            <el-table-column
+              align="center"
+              v-if="col.prop =='DT'"
+              :prop="col.prop"
+              :label="col.label">
+            </el-table-column>
           </template>
         </el-table>
       </div>
@@ -269,6 +289,13 @@
               console.log(err)
             });
         }
+        else {
+          this.$message({
+            message: '时间不能为空',
+            center: true,
+            type: 'warning'
+          });
+        }
       },
 
 
@@ -375,62 +402,62 @@
 
 
       drawLine() {
-    // 基于准备好的dom，初始化echarts实例
-    this.$nextTick(() => {
-      let myChart = this.$echarts.init(document.getElementById('dataBar'));
-      // 绘制图表
-      myChart.setOption({
-        title: {
-          text: this.name,
-          subtext: '实时显示'
-        },
-        tooltip: {
-          trigger: 'axis'
-        },
-        legend: {
-          data: ['当前时间段数据']
-        },
-        grid: {
-          x: 40,
-          borderWidth: 1,
-          x2: 10,
-          y2: 30
-        },
+        // 基于准备好的dom，初始化echarts实例
+        this.$nextTick(() => {
+          let myChart = this.$echarts.init(document.getElementById('dataBar'));
+          // 绘制图表
+          myChart.setOption({
+            title: {
+              text: this.name,
+              subtext: '实时显示'
+            },
+            tooltip: {
+              trigger: 'axis'
+            },
+            legend: {
+              data: []
+            },
+            grid: {
+              x: 50,
+              borderWidth: 1,
+              x2: 10,
+              y2: 30
+            },
 
-        toolbox: {
-          show: true,
-          feature: {
-            mark: {show: true},
-            magicType: {show: true, type: ['line', 'bar']},
-            restore: {show: true},
-          }
-        },
-        calculable: true,
-        xAxis: [
-          {
-            type: 'category',
-            boundaryGap: false,
-            data: this.xData
-          }
-        ],
-        yAxis: [
-          {
-            max: this.yMax,
-            min: this.yMin,
-            type: 'value'
-          }
-        ],
-        series: [
-          {
-            name:'当前时间段数据',
-            type:'line',
-            smooth:true,
-            data:this.yData
-          }
-        ]
-      });
-    })
-  },
+            toolbox: {
+              show: true,
+              feature: {
+                mark: {show: true},
+                magicType: {show: true, type: ['line', 'bar']},
+                restore: {show: true},
+              }
+            },
+            calculable: true,
+            xAxis: [
+              {
+                type: 'category',
+                boundaryGap: false,
+                data: this.xData
+              }
+            ],
+            yAxis: [
+              {
+                max: this.yMax,
+                min: this.yMin,
+                type: 'value'
+              }
+            ],
+            series: [
+              {
+                name: '当前时间段数据',
+                type: 'line',
+                smooth: true,
+                data: this.yData
+              }
+            ]
+          });
+        })
+      },
 
     }
   }
@@ -475,6 +502,7 @@
       }
     }
     .contentBottom {
+      margin-bottom: 80px;
 
     }
     .modal {
@@ -489,8 +517,9 @@
       align-items: center;
       justify-content: center;
       .container {
-        width: 95%;
+        width: 98%;
         height: 90%;
+        overflow: auto;
         margin: auto;
         position: absolute;
         top: 0;
@@ -555,7 +584,6 @@
   .container {
     width: 100%;
     height: 100%;
-    background-color: #d93f30;
 
   }
 

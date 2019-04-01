@@ -60,7 +60,7 @@
     name: 'indexLogin',
     data() {
       return {
-        loginTitle:"Pi实时数据库监控系统",
+        loginTitle:"PI实时数据分析系统",
         loginFooter:" Copyright ©2019 湖北兴发化工集团股份有限公司",
 
 

@@ -33,7 +33,7 @@
     name: 'headerCommon',
     data() {
       return {
-        headerTitle:"PI实时数据库监控管理系统",
+        headerTitle:"PI实时数据分析系统",
         userName: "",
       }
     },
