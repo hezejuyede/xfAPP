@@ -2,9 +2,6 @@
   <div id="register-page">
     <back></back>
     <div class="register-page-div">
-      <header class="login-title" >
-        <h1>{{loginTitle}}</h1>
-      </header>
       <div class="register">
         <div class="register-top">
           注册用户
@@ -292,123 +289,115 @@
 
   #register-page {
     width: 100%;
-    position: absolute;
+    height: 100%;
     background: url("../../assets/img/bg.jpg") center center;
     background-size: cover;
-    max-width: 640px;
-    margin: auto;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     .register-page-div {
       width: 300px;
-      height:520px;
+      height:450px;
       font-size: 14px;
-      margin: auto;
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-    }
-
-    .register {
-      width: 300px;
-      height: 400px;
-      background-color: @color-F0;
-      border-radius: 10%;
-      .register-top {
-        height: 50px;
+      header {
         text-align: center;
-        line-height: 50px;
-        font-size: 14px;
-        color: @color-background-dd;
-      }
-      .register-bottom {
-        width: 100%;
-        height: 80%;
-        .register-bottom-template {
-          width: 90%;
-          height: 50px;
-          background-color: @color-white;
-          margin: 0 auto 25px auto;
-          border-radius: 5%;
-          position: relative;
-          .input-left{
-            width: 15%;
-            text-align: center;
-            line-height: 50px;
-          }
-          .input-right{
-            width: 85%;
-            height: 100%;
-          }
-          input {
-            display: block;
-            height: 50px;
-            line-height: 50px;
-            width: 95%;
-            padding-left: 20px;
-          }
-          .userErrText {
-            position: absolute;
-            bottom: -20px;
-            left: 10px;
-            color: @color-red;
-
-          }
-          .passwordText {
-            position: absolute;
-            bottom: -20px;
-            left: 10px;
-            color: @color-red;
-          }
-          .passwordText2 {
-            position: absolute;
-            bottom: -20px;
-            left: 10px;
-            color: @color-red;
-          }
-          .codeText{
-            position: absolute;
-            bottom: -20px;
-            left: 10px;
-            color: @color-red;
-          }
-        }
-        button {
-          display: block;
-          width: 80%;
-          margin: 0 auto;
-          height: 35px;
-          background-color: #409EFF;;
+        margin-bottom: 30px;
+        h1 {
+          font-size: @font-size-large-xx;
           color: @color-white;
-          font-size: @font-size-medium;
-          text-align: center;
-          line-height: 35px;
-          border-radius: 15px;
-          border: 0;
         }
-      }
 
-    }
-    header {
-      width: 100%;
-      height: 50px;
-      text-align: center;
-      margin-bottom: 20px;
-      img {
-        height: 80px;
       }
+      .register {
+        width: 300px;
+        height: 400px;
+        background-color: @color-F0;
+        border-radius: 10%;
+        .register-top {
+          height: 50px;
+          text-align: center;
+          line-height: 50px;
+          font-size: 14px;
+          color: @color-background-dd;
+        }
+        .register-bottom {
+          width: 100%;
+          height: 80%;
+          .register-bottom-template {
+            width: 90%;
+            height: 50px;
+            background-color: @color-white;
+            margin: 0 auto 25px auto;
+            border-radius: 5%;
+            position: relative;
+            .input-left{
+              width: 15%;
+              text-align: center;
+              line-height: 50px;
+            }
+            .input-right{
+              width: 85%;
+              height: 100%;
+            }
+            input {
+              display: block;
+              height: 50px;
+              line-height: 50px;
+              width: 95%;
+              padding-left: 20px;
+            }
+            .userErrText {
+              position: absolute;
+              bottom: -20px;
+              left: 10px;
+              color: @color-red;
 
+            }
+            .passwordText {
+              position: absolute;
+              bottom: -20px;
+              left: 10px;
+              color: @color-red;
+            }
+            .passwordText2 {
+              position: absolute;
+              bottom: -20px;
+              left: 10px;
+              color: @color-red;
+            }
+            .codeText{
+              position: absolute;
+              bottom: -20px;
+              left: 10px;
+              color: @color-red;
+            }
+          }
+          button {
+            display: block;
+            width: 80%;
+            margin: 0 auto;
+            height: 35px;
+            background-color: #409EFF;;
+            color: @color-white;
+            font-size: @font-size-medium;
+            text-align: center;
+            line-height: 35px;
+            border-radius: 15px;
+            border: 0;
+          }
+        }
+
+      }
+      footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: @font-size-medium-x;
+        color: @color-white;
+      }
     }
-    footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: @font-size-medium-x;
-      color: @color-white;
-    }
+
+
   }
 
 

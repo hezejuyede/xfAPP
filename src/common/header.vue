@@ -66,7 +66,7 @@
           type: 'warning'
         })
           .then(() => {
-            axios.post("  " + realTimeUrl + "/api/LeavePost", qs.stringify({"username": this.userName}))
+            axios.post("  " + realTimeUrl + "/api/LeavePost.ashx", qs.stringify({"username": this.userName}))
               .then((res) => {
                 if (res.data === "1") {
                   this.$message({

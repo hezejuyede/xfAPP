@@ -30,6 +30,10 @@
   .back {
     width: 100%;
     height: 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
     line-height: 30px;
     padding-left: 15px;
     color: @color-white;

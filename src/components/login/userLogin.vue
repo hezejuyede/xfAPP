@@ -162,7 +162,7 @@
 
                 setTimeout(c, 2000);
               }
-              else if (res.data === "2") {
+              else if (res.data == "2") {
                 this.message = "该用户没有注册";
                 this.HideModal = false;
                 const that = this;
