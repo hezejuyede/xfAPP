@@ -125,10 +125,12 @@
 
 
         name: "",
+        yMax: "",
+        yMin: "",
         xData: [],
         yData: [],
-        startTime:"",
-        endTime:""
+        startTime: "",
+        endTime: ""
 
       }
 
@@ -210,6 +212,8 @@
                 this.xData = res.data.xData;
                 this.yData = res.data.yData;
                 this.name = res.data.name;
+                this.yMax= res.data.Max;
+                this.yMin = res.data.Min;
                 this.isHideCurve = false;
                 this.drawLine();
               }
@@ -257,6 +261,8 @@
               this.xData = res.data.xData;
               this.yData = res.data.yData;
               this.name = res.data.name;
+              this.yMax= res.data.Max;
+              this.yMin = res.data.Min;
               this.drawLine();
             })
             .catch((err) => {
@@ -409,6 +415,8 @@
         ],
         yAxis: [
           {
+            max: this.yMax,
+            min: this.yMin,
             type: 'value'
           }
         ],
