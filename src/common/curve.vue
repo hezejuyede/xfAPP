@@ -52,78 +52,69 @@
 
     },
     watch: {
-      excelData: {
-        xData(newValue, oldValue) {
-          if (newValue === true) {
-
-
+      pieData() {
+        this.$nextTick(() => {
+          if (this.pieData) {
+            this.init()
           }
-        },
-        yData(newValue, oldValue) {
-          if (newValue === true) {
-
-
-          }
-        },
-        deep: true
+        })
       }
-
     },
     methods: {
       drawLine() {
         // 基于准备好的dom，初始化echarts实例
+        this.$nextTick(() => {
+          let myChart = this.$echarts.init(document.getElementById('dataBar'));
+          // 绘制图表
+          myChart.setOption({
+            title: {
+              text: this.name,
+              subtext: '实时显示'
+            },
+            tooltip: {
+              trigger: 'axis'
+            },
+            legend: {
+              data: ['当前时间段数据']
+            },
+            grid: {
+              x: 40,
+              borderWidth: 1,
+              x2: 10,
+              y2: 30
+            },
 
-        let myChart = this.$echarts.init(document.getElementById('dataBar'));
-
-        // 绘制图表
-        myChart.setOption({
-          title: {
-            text: this.name,
-            subtext: '实时显示'
-          },
-          tooltip: {
-            trigger: 'axis'
-          },
-          legend: {
-            data: ['当前时间段数据']
-          },
-          grid: {
-            x: 40,
-            borderWidth: 1,
-            x2: 10,
-            y2: 30
-          },
-
-          toolbox: {
-            show: true,
-            feature: {
-              mark: {show: true},
-              magicType: {show: true, type: ['line', 'bar']},
-              restore: {show: true},
-            }
-          },
-          calculable: true,
-          xAxis: [
-            {
-              type: 'category',
-              boundaryGap: false,
-              data: this.xData
-            }
-          ],
-          yAxis: [
-            {
-              type: 'value'
-            }
-          ],
-          series: [
-            {
-              name:'当前时间段数据',
-              type:'line',
-              smooth:true,
-              data:this.yData
-            }
-          ]
-        });
+            toolbox: {
+              show: true,
+              feature: {
+                mark: {show: true},
+                magicType: {show: true, type: ['line', 'bar']},
+                restore: {show: true},
+              }
+            },
+            calculable: true,
+            xAxis: [
+              {
+                type: 'category',
+                boundaryGap: false,
+                data: this.xData
+              }
+            ],
+            yAxis: [
+              {
+                type: 'value'
+              }
+            ],
+            series: [
+              {
+                name:'当前时间段数据',
+                type:'line',
+                smooth:true,
+                data:this.yData
+              }
+            ]
+          });
+        })
       },
 
       closeModal() {

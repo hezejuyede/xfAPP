@@ -4,15 +4,25 @@
     <div class="contentDiv">
       <div class="contentTop" ref="contentTop">
         <div class="listSearch">
-          <div class="listSearchSelect">
+          <div class="containerTopDivTime">
+            <el-date-picker
+              style="width: 100%"
+              v-model="time"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="查询日期">
+            </el-date-picker>
+          </div>
+          <div class="containerTopDivSelect">
             <el-select
+              style="width: 90%"
               v-model="select"
               clearable
               filterable
               allow-create
               default-first-option
               @change="changeSelect"
-              placeholder="选择查看的报表">
+              placeholder="报表名">
               <el-option
                 v-for="item in selectOptions"
                 :key="item.id"
@@ -21,8 +31,8 @@
               </el-option>
             </el-select>
           </div>
-          <div class="listSearchBtn">
-            <el-button type="success" icon="search" @click="doSearch">查询</el-button>
+          <div class="containerTopDivBtn">
+            <el-button type="success" @click="doSearch">查询</el-button>
           </div>
         </div>
       </div>
@@ -58,6 +68,7 @@
   import Loading from '../common/loading'
   import Modal from '../common/modal'
   import qs from 'qs'
+  import {getNowTime} from '../assets/js/api'
 
   export default {
     name: 'ProductionExecution',
@@ -73,7 +84,7 @@
 
         tableData: [],
         cols: [],
-
+        time: ""
       }
 
     },
@@ -106,7 +117,10 @@
         let that = this;
         axios.all([
           axios.post(" " + realTimeUrl + "/api/showTableTitle.ashx", qs.stringify({"name": "reportForm"})),
-          axios.post(" " + realTimeUrl + "/api/showReportFormContextList.ashx", qs.stringify({"id": data}))
+          axios.post(" " + realTimeUrl + "/api/showReportFormContextList.ashx", qs.stringify({
+            "id": data,
+            "time": this.time
+          }))
         ])
           .then(axios.spread(function (title, table) {
             that.cols = title.data;
@@ -122,6 +136,7 @@
         }
         else {
           let that = this;
+          this.time = getNowTime();
           axios.all([
             axios.post(" " + realTimeUrl + "/api/getSelectReportForm.ashx"),
           ])
@@ -136,17 +151,19 @@
 
       //改变下拉显示数据
       changeSelect() {
-        if (this.select) {
-          this.loadingShowData(this.select)
+        if (this.select && this.time ) {
+          this.loadingShowData(this.select,this.time)
         }
         else {
-          this.message = "下拉选择不能为空";
+          this.message = "时间和下拉不能为空";
           this.HideModal = false;
           const that = this;
+
           function a() {
             that.message = "";
             that.HideModal = true;
           }
+
           setTimeout(a, 2000);
 
         }
@@ -154,8 +171,8 @@
 
       //进行查询
       doSearch() {
-        if (this.select) {
-          this.loadingShowData(this.select)
+        if (this.select && this.time) {
+          this.loadingShowData(this.select,this.time)
         }
         else {
           this.message = "下拉选择不能为空";
@@ -166,10 +183,8 @@
             that.HideModal = true;
           }
           setTimeout(a, 2000);
-
         }
       },
-
 
 
 
@@ -246,7 +261,6 @@
   .template {
     margin-bottom: 80px;
     .contentTop {
-      height: 80px;
       width: 100%;
       background-color: #D8E5F6;
       display: flex;
@@ -255,15 +269,24 @@
       margin-bottom: 20px;
       .listSearch {
         width: 95%;
+        height: 60px;
         display: flex;
-        .listSearchSelect {
-          flex: 3;
+        align-items: center;
+        justify-content: center;
+        .containerTopDivTime{
+          flex: 1.5;
           display: flex;
           align-items: center;
           justify-content: center;
         }
-        .listSearchBtn {
-          flex: 1;
+        .containerTopDivSelect{
+          flex: 1.1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .containerTopDivBtn{
+          flex: 0.7;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -271,12 +294,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
+            width: 95%;
             height: 35px;
             margin-left: 2%;
           }
         }
-
       }
     }
     .contentBottom {

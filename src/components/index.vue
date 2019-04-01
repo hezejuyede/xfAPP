@@ -7,6 +7,7 @@
           <div class="listSearchSelect">
             <el-select
               v-model="select"
+              style="width: 80%"
               clearable
               filterable
               allow-create
@@ -43,13 +44,48 @@
     <div class="upTop" ref="upTop" @click="upToTop">
       <i class="iconfont icon-xiangshang1"></i>
     </div>
-    <Curve
+    <div v-bind:class="{hideModal:isHideCurve}">
+      <div class="modal">
+        <div class="container">
+          <div class="containerTop">
+            <div class="containerTopDiv">
+              <el-button type="danger" @click="modalClose">关闭窗口</el-button>
+            </div>
+            <div class="containerTopDiv">
+              <el-date-picker
+                style="width: 300px"
+                v-model="startTime"
+                type="datetime"
+                value-format="yyyy-MM-dd hh:mm:ss"
+                placeholder="开始时间">
+              </el-date-picker>
+            </div>
+            <div class="containerTopDiv">
+              <el-date-picker
+                style="width: 300px"
+                v-model="endTime"
+                type="datetime"
+                value-format="yyyy-MM-dd hh:mm:ss"
+                placeholder="结束时间">
+              </el-date-picker>
+            </div>
+            <div class="containerTopDiv">
+              <el-button type="primary" @click="doSearchData()">查询曲线</el-button>
+            </div>
+          </div>
+          <div class="containerBottom">
+            <div id="dataBar" :style="{width: '100%', height: '300px'}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+   <!-- <Curve
       :xData="xData"
       :yData="yData"
       :isHideCurve="isHideCurve"
       :name="name"
       v-on:modalClose="modalClose"
-      v-on:doSearchData="doSearchData"></Curve>
+      v-on:doSearchData="doSearchData"></Curve>-->
     <Modal :msg="message"
            :isHideModal="HideModal"></Modal>
     <div class="loading-container" v-show="!img">
@@ -90,7 +126,10 @@
 
         name: "",
         xData: [],
-        yData: []
+        yData: [],
+        startTime:"",
+        endTime:""
+
       }
 
     },
@@ -151,8 +190,10 @@
 
 
       //关闭曲线页面
-      modalClose(val) {
-        this.isHideCurve = val;
+      modalClose() {
+        this.isHideCurve = true;
+        this.xData = [];
+        this.yData = [];
       },
 
       //查看曲线
@@ -163,25 +204,25 @@
             "tag": this.tag
           }))
             .then((res) => {
-
-              let a = [];
-              let b = [];
-              for (let i = 0, l = res.data.xData.length; i < l; i++) {
-                a.push(res.data.xData[i])
-              }
-              for (let i = 0, l = res.data.yData.length; i < l; i++) {
-                b.push(res.data.yData[i])
-              }
-
-              this.xData = a;
-              this.yData = b;
-              this.name = res.data.name;
-              console.log(this.xData);
-              console.log(this.yData);
-              console.log(this.name);
-              setTimeout(()=>{
+              if(res.data.xData.length>0 &&res.data.yData.length>0){
+                this.startTime="";
+                this.endTime="";
+                this.xData = res.data.xData;
+                this.yData = res.data.yData;
+                this.name = res.data.name;
                 this.isHideCurve = false;
-              },4000)
+                this.drawLine();
+              }
+              else {
+                this.message = "该测点没有曲线";
+                this.HideModal = false;
+                const that = this;
+                function a() {
+                  that.message = "";
+                  that.HideModal = true;
+                }
+                setTimeout(a, 2000);
+              }
 
             })
             .catch((err) => {
@@ -205,17 +246,18 @@
 
 
       //根据数据进行曲线查询
-      doSearchData(val) {
-        if (val) {
+      doSearchData() {
+        if (this.startTime && this.endTime) {
           axios.post(" " + realTimeUrl + "/api/getRealTimeCure.ashx", qs.stringify({
-            "startTime": val.startTime,
-            "endTime": val.endTime
+            "tag": this.tag,
+            "startTime": this.startTime,
+            "endTime": this.endTime
           }))
             .then((res) => {
               this.xData = res.data.xData;
               this.yData = res.data.yData;
               this.name = res.data.name;
-              this.isHideCurve = true;
+              this.drawLine();
             })
             .catch((err) => {
               console.log(err)
@@ -326,6 +368,62 @@
       },
 
 
+      drawLine() {
+    // 基于准备好的dom，初始化echarts实例
+    this.$nextTick(() => {
+      let myChart = this.$echarts.init(document.getElementById('dataBar'));
+      // 绘制图表
+      myChart.setOption({
+        title: {
+          text: this.name,
+          subtext: '实时显示'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['当前时间段数据']
+        },
+        grid: {
+          x: 40,
+          borderWidth: 1,
+          x2: 10,
+          y2: 30
+        },
+
+        toolbox: {
+          show: true,
+          feature: {
+            mark: {show: true},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+          }
+        },
+        calculable: true,
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: this.xData
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        series: [
+          {
+            name:'当前时间段数据',
+            type:'line',
+            smooth:true,
+            data:this.yData
+          }
+        ]
+      });
+    })
+  },
+
     }
   }
 </script>
@@ -370,6 +468,58 @@
     }
     .contentBottom {
 
+    }
+    .modal {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 999;
+      width: 100%;
+      height: 100%;
+      background-color: @color-background-dd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .container {
+        width: 95%;
+        height: 90%;
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: @color-white;
+        border-radius: 10px;
+        .containerTop{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          .containerTopDiv{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2%;
+            .el-button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 200px;
+              height:35px;
+              margin-right: 10%;
+              margin-left: 10%;
+            }
+          }
+        }
+        .containerBottom{
+          margin-top: 5%;
+        }
+      }
+    }
+
+    .hideModal {
+      display: none;
     }
 
   }

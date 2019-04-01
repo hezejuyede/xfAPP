@@ -24,7 +24,8 @@ export function timer() {
 
 
 export function getNowTime() {
-    let date = new Date();
+   let time = new Date().getTime()-24*60*60*1000;
+    let date = new Date(time);
     let HG = '-';
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
