@@ -2,7 +2,8 @@
   <div id="register-page">
     <back></back>
     <div class="register-page-div">
-      <header class="login-title">
+      <header class="login-title" >
+        <h1>{{loginTitle}}</h1>
       </header>
       <div class="register">
         <div class="register-top">
@@ -90,12 +91,15 @@
   import Modal from '../../common/modal'
   import Loading from '../../common/loading';
   import Back from '../../common/back';
+  import realTimeUrl from '../../assets/js/realTimeUrl'
+  import qs from 'qs'
 
   export default {
     name: 'register',
     data() {
       return {
         img: '',
+        loginTitle:"Pi实时数据库监控系统",
         registerFooter:"湖北兴发化工集团股份有限公司",
 
         message: '',
@@ -199,11 +203,11 @@
       },
       register() {
         if (this.userNameState === true && this.passwordState === true && this.passwordState2 === true && this.codeState === true) {
-          axios.post("/node/userRegister", {
+          axios.post(" " + realTimeUrl + "/api/userRegister.ashx", qs.stringify({
             username: this.username,
             password: this.password,
             code:this.code
-          })
+          }))
             .then((res) => {
               if (res.data.state === "1") {
                 let userInfo = res.data;

@@ -27,6 +27,8 @@
 <script type="text/ecmascript-6">
   import axios from 'axios'
   import url from '../assets/js/URL'
+  import realTimeUrl from '../assets/js/realTimeUrl'
+  import qs from 'qs'
   export default {
     name: 'headerCommon',
     data() {
@@ -64,7 +66,7 @@
           type: 'warning'
         })
           .then(() => {
-            axios.post("  " + url + "/node/LeavePost", {"username": this.userName})
+            axios.post("  " + realTimeUrl + "/api/LeavePost", qs.stringify({"username": this.userName}))
               .then((res) => {
                 if (res.data === "1") {
                   this.$message({

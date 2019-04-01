@@ -52,8 +52,9 @@
   import url from '../../assets/js/URL'
   import axios from 'axios'
   import Modal from '../../common/modal'
+  import realTimeUrl from '../../assets/js/realTimeUrl'
 
-  import Qs from 'qs'
+  import qs from 'qs'
 
   export default {
     name: 'indexLogin',
@@ -123,12 +124,12 @@
       //进行登陆
       login() {
         if (this.userNameState === true && this.passwordState === true) {
-          axios.post(" " + url + "/node/userLogin",
+          axios.post(" " + realTimeUrl + "/api/userLogin.ashx",qs.stringify(
             {
               "username": this.username,
               "password": this.password
             }
-          )
+          ))
             .then((res) => {
               if (res.data.state === "1") {
 
