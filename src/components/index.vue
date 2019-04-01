@@ -66,6 +66,7 @@
   import Loading from '../common/loading'
   import Modal from '../common/modal'
   import Curve from '../common/curve'
+  import qs from 'qs'
 
 
   export default {
@@ -74,7 +75,7 @@
       return {
         message: '',
         HideModal: true,
-        isHideCurve: false,
+        isHideCurve: true,
 
 
         img: "",
@@ -87,9 +88,9 @@
         cols: [],
 
 
-        name: "dddddddd",
-        xData: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],
-        yData: [3501, 2501, 3515, 3585, 2900, 3530, 2510, 3501, 2501, 3515, 3585, 2200, 3530, 2510, 3501, 2501, 3515, 3585, 2500, 3530, 2510, 3501, 2501, 3501,]
+        name: "",
+        xData: [],
+        yData: []
       }
 
     },
@@ -120,8 +121,8 @@
       loadingShowData(data) {
         let that = this;
         axios.all([
-          axios.post(" " + realTimeUrl + "/api/showTableTitle.ashx", {"name": "realTime"}),
-          axios.post(" " + realTimeUrl + "/api/showContextList.ashx", {"id": data})
+          axios.post(" " + realTimeUrl + "/api/showTableTitle.ashx", qs.stringify({"name": "realTime"})),
+          axios.post(" " + realTimeUrl + "/api/showContextList.ashx", qs.stringify({"id": data}))
         ])
           .then(axios.spread(function (title, table) {
             that.cols = title.data;
@@ -154,37 +155,62 @@
         this.isHideCurve = val;
       },
 
+      //查看曲线
       doSeeCurve(row, column, event) {
-        this.tag = row.id;
+        this.tag = row.tag;
         if (this.tag) {
-          axios.post(" " + realTimeUrl + "/api/getNowRealTimeCure.ashx", {
+          axios.post(" " + realTimeUrl + "/api/getNowRealTimeCure.ashx", qs.stringify({
             "tag": this.tag
-          })
+          }))
             .then((res) => {
-              this.xData = res.data.xData;
-              this.yData = res.data.yData;
+
+              let a = [];
+              let b = [];
+              for (let i = 0, l = res.data.xData.length; i < l; i++) {
+                a.push(res.data.xData[i])
+              }
+              for (let i = 0, l = res.data.yData.length; i < l; i++) {
+                b.push(res.data.yData[i])
+              }
+
+              this.xData = a;
+              this.yData = b;
               this.name = res.data.name;
-              this.isHideCurve = true;
+              console.log(this.xData);
+              console.log(this.yData);
+              console.log(this.name);
+              setTimeout(()=>{
+                this.isHideCurve = false;
+              },4000)
+
             })
             .catch((err) => {
+
               console.log(err)
             });
         }
         else {
+          this.message = "该数据没有找出测点";
+          this.HideModal = false;
+          const that = this;
 
+          function a() {
+            that.message = "";
+            that.HideModal = true;
+          }
+
+          setTimeout(a, 2000);
         }
-
-
       },
 
 
       //根据数据进行曲线查询
       doSearchData(val) {
         if (val) {
-          axios.post(" " + realTimeUrl + "/api/getRealTimeCure.ashx", {
+          axios.post(" " + realTimeUrl + "/api/getRealTimeCure.ashx", qs.stringify({
             "startTime": val.startTime,
             "endTime": val.endTime
-          })
+          }))
             .then((res) => {
               this.xData = res.data.xData;
               this.yData = res.data.yData;

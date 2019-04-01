@@ -57,6 +57,7 @@
   import footerNav from '../common/footer'
   import Loading from '../common/loading'
   import Modal from '../common/modal'
+  import qs from 'qs'
 
   export default {
     name: 'ProductionExecution',
@@ -104,8 +105,8 @@
       loadingShowData(data) {
         let that = this;
         axios.all([
-          axios.post(" " + realTimeUrl + "/api/showTableTitle.ashx", {"name": "reportForm"}),
-          axios.post(" " + realTimeUrl + "/api/showContextList.ashx", {"id": this.select})
+          axios.post(" " + realTimeUrl + "/api/showTableTitle.ashx", qs.stringify({"name": "reportForm"})),
+          axios.post(" " + realTimeUrl + "/api/showReportFormContextList.ashx", qs.stringify({"id": data}))
         ])
           .then(axios.spread(function (title, table) {
             that.cols = title.data;
@@ -122,7 +123,7 @@
         else {
           let that = this;
           axios.all([
-            axios.post(" " + realTimeUrl + "/api/getSelectReportForm.ashx", {"id": ""}),
+            axios.post(" " + realTimeUrl + "/api/getSelectReportForm.ashx"),
           ])
             .then(axios.spread(function (select) {
               that.select = select.data[0].id;
