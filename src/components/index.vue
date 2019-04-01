@@ -124,7 +124,6 @@
   import Curve from '../common/curve'
   import qs from 'qs'
 
-
   export default {
     name: 'ProductionExecution',
     data() {

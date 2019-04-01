@@ -24,9 +24,15 @@
 
   },
   created() {
+    //禁用浏览器后退事件
+    this.beforeCreate ();
 
   },
   methods: {
+    beforeCreate () {
+      disableHistory(document.URL)
+    },
+
     _getIndexUrl() {
       let Url = localStorage.getItem("IndexUrl");
       if (Url === null) {
