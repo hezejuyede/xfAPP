@@ -63,7 +63,7 @@
       <div v-bind:class="{hideModal:isHideCurve}">
         <div class="modal">
           <div class="container">
-            <div class="containerTop">
+            <div class="containerTop" v-if="this.topShow==='1'">
               <div class="containerTopDiv">
                 <el-button type="danger" @click="modalClose">关闭窗口</el-button>
               </div>
@@ -87,6 +87,32 @@
               </div>
               <div class="containerTopDiv">
                 <el-button type="primary" @click="doSearchData()">查询曲线</el-button>
+              </div>
+            </div>
+            <div class="containerTop2"  v-if="this.topShow==='2'">
+              <div class="containerTopDiv2">
+                <el-date-picker
+                  style="width: 200px"
+                  v-model="startTime"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="开始时间">
+                </el-date-picker>
+              </div>
+              <div class="containerTopDiv2">
+                <el-date-picker
+                  style="width: 200px"
+                  v-model="endTime"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="结束时间">
+                </el-date-picker>
+              </div>
+              <div class="containerTopDiv2">
+                <el-button type="primary" @click="doSearchData()">查询</el-button>
+              </div>
+              <div class="containerTopDiv2">
+                <el-button type="danger" @click="modalClose">关闭</el-button>
               </div>
             </div>
             <div class="containerBottom">
@@ -132,6 +158,7 @@
         HideModal: true,
         isHideCurve: true,
         curveState :false,
+        topShow:'1',
 
 
         img: "",
@@ -196,64 +223,190 @@
         const that = this;
         window.addEventListener('orientationchange', function () {
           if (that.curveState === true) {
-            that.$nextTick(() => {
-              let myChart = that.$echarts.init(document.getElementById('dataBar'));
-              myChart.resize();
-              // 绘制图表
-              myChart.setOption({
-                title: {
-                  text: this.name,
-                  subtext: '实时显示'
-                },
-                tooltip: {
-                  trigger: 'axis'
-                },
-                legend: {
-                  data: []
-                },
-                grid: {
-                  x: 50,
-                  borderWidth: 1,
-                  x2: 10,
-                  y2: 30
-                },
-
-                toolbox: {
-                  show: true,
-                  feature: {
-                    mark: {show: true},
-                    magicType: {show: true, type: ['line', 'bar']},
-                    restore: {show: true},
-                  }
-                },
-                calculable: true,
-                xAxis: [
-                  {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: that.xData
-                  }
-                ],
-                yAxis: [
-                  {
-                    max: that.yMax,
-                    min: that.yMin,
-                    type: 'value'
-                  }
-                ],
-                series: [
-                  {
-                    name: '当前时间段数据',
-                    type: 'line',
-                    smooth: true,
-                    data: that.yData
-                  }
-                ]
-              });
-              window.addEventListener("resize",()=>{
+            if(window.orientation===90){
+              that.topShow="2";
+              that.$nextTick(() => {
+                let myChart = that.$echarts.init(document.getElementById('dataBar'));
                 myChart.resize();
-              });
-            })
+                // 绘制图表
+                myChart.setOption({
+                  title: {
+                    text: this.name,
+                    subtext: '实时显示'
+                  },
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  legend: {
+                    data: []
+                  },
+                  grid: {
+                    x: 50,
+                    borderWidth: 1,
+                    x2: 10,
+                    y2: 30
+                  },
+
+                  toolbox: {
+                    show: true,
+                    feature: {
+                      mark: {show: true},
+                      magicType: {show: true, type: ['line', 'bar']},
+                      restore: {show: true},
+                    }
+                  },
+                  calculable: true,
+                  xAxis: [
+                    {
+                      type: 'category',
+                      boundaryGap: false,
+                      data: that.xData
+                    }
+                  ],
+                  yAxis: [
+                    {
+                      max: that.yMax,
+                      min: that.yMin,
+                      type: 'value'
+                    }
+                  ],
+                  series: [
+                    {
+                      name: '当前时间段数据',
+                      type: 'line',
+                      smooth: true,
+                      data: that.yData
+                    }
+                  ]
+                });
+                window.addEventListener("resize",()=>{
+                  myChart.resize();
+                });
+              })
+            }
+            if(window.orientation===0){
+              that.topShow="1";
+              that.$nextTick(() => {
+                let myChart = that.$echarts.init(document.getElementById('dataBar'));
+                myChart.resize();
+                // 绘制图表
+                myChart.setOption({
+                  title: {
+                    text: this.name,
+                    subtext: '实时显示'
+                  },
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  legend: {
+                    data: []
+                  },
+                  grid: {
+                    x: 50,
+                    borderWidth: 1,
+                    x2: 10,
+                    y2: 30
+                  },
+
+                  toolbox: {
+                    show: true,
+                    feature: {
+                      mark: {show: true},
+                      magicType: {show: true, type: ['line', 'bar']},
+                      restore: {show: true},
+                    }
+                  },
+                  calculable: true,
+                  xAxis: [
+                    {
+                      type: 'category',
+                      boundaryGap: false,
+                      data: that.xData
+                    }
+                  ],
+                  yAxis: [
+                    {
+                      max: that.yMax,
+                      min: that.yMin,
+                      type: 'value'
+                    }
+                  ],
+                  series: [
+                    {
+                      name: '当前时间段数据',
+                      type: 'line',
+                      smooth: true,
+                      data: that.yData
+                    }
+                  ]
+                });
+                window.addEventListener("resize",()=>{
+                  myChart.resize();
+                });
+              })
+            }
+            if(window.orientation===-90){
+              that.topShow="2";
+              that.$nextTick(() => {
+                let myChart = that.$echarts.init(document.getElementById('dataBar'));
+                myChart.resize();
+                // 绘制图表
+                myChart.setOption({
+                  title: {
+                    text: this.name,
+                    subtext: '实时显示'
+                  },
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  legend: {
+                    data: []
+                  },
+                  grid: {
+                    x: 50,
+                    borderWidth: 1,
+                    x2: 10,
+                    y2: 30
+                  },
+
+                  toolbox: {
+                    show: true,
+                    feature: {
+                      mark: {show: true},
+                      magicType: {show: true, type: ['line', 'bar']},
+                      restore: {show: true},
+                    }
+                  },
+                  calculable: true,
+                  xAxis: [
+                    {
+                      type: 'category',
+                      boundaryGap: false,
+                      data: that.xData
+                    }
+                  ],
+                  yAxis: [
+                    {
+                      max: that.yMax,
+                      min: that.yMin,
+                      type: 'value'
+                    }
+                  ],
+                  series: [
+                    {
+                      name: '当前时间段数据',
+                      type: 'line',
+                      smooth: true,
+                      data: that.yData
+                    }
+                  ]
+                });
+                window.addEventListener("resize",()=>{
+                  myChart.resize();
+                });
+              })
+            }
+
           }
         });
       },
@@ -575,7 +728,7 @@
       justify-content: center;
       .container {
         width: 98%;
-        height: 90%;
+        height: 98%;
         overflow: auto;
         margin: auto;
         position: absolute;
@@ -606,8 +759,28 @@
             }
           }
         }
+        .containerTop2 {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .containerTopDiv2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1%;
+            margin-left: 2%;
+            .el-button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 60px;
+              height: 35px;
+              margin-right: 10%;
+              margin-left: 10%;
+            }
+          }
+        }
         .containerBottom {
-          margin-top: 5%;
         }
       }
     }
