@@ -77,12 +77,27 @@
     },
     components: {Modal},
     created() {
+      this.getLoginMessage()
 
     },
     mounted() {
     },
     methods: {
+      getLoginMessage() {
+        let loginMessage =localStorage.getItem('loginMessage');
+        if(loginMessage===null){
 
+        }
+        else {
+          let loginData = JSON.parse(loginMessage);
+          this.username =loginData.username;
+          this.password =loginData.password;
+          this.userNameState =true;
+          this.passwordState = true
+        }
+
+
+      },
       //用户名框移开焦点监测
       userNameBlur(username) {
         if (username.length === 0) {
@@ -132,7 +147,12 @@
           ))
             .then((res) => {
               if (res.data.state === "1") {
-
+                let LoginMessage = {
+                  "username": this.username,
+                  "password": this.password
+                };
+                let loginMessage = JSON.stringify(LoginMessage);
+                localStorage.setItem('loginMessage', loginMessage);
                 let userInfo = res.data;
                 userInfo = JSON.stringify(userInfo);
                 sessionStorage.setItem("userInfo", userInfo);

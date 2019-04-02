@@ -131,6 +131,7 @@
         message: '',
         HideModal: true,
         isHideCurve: true,
+        curveState :false,
 
 
         img: "",
@@ -194,7 +195,66 @@
       hp() {
         const that = this;
         window.addEventListener('orientationchange', function () {
-          that.drawLine();
+          if (that.curveState === true) {
+            that.$nextTick(() => {
+              let myChart = that.$echarts.init(document.getElementById('dataBar'));
+              myChart.resize();
+              // 绘制图表
+              myChart.setOption({
+                title: {
+                  text: this.name,
+                  subtext: '实时显示'
+                },
+                tooltip: {
+                  trigger: 'axis'
+                },
+                legend: {
+                  data: []
+                },
+                grid: {
+                  x: 50,
+                  borderWidth: 1,
+                  x2: 10,
+                  y2: 30
+                },
+
+                toolbox: {
+                  show: true,
+                  feature: {
+                    mark: {show: true},
+                    magicType: {show: true, type: ['line', 'bar']},
+                    restore: {show: true},
+                  }
+                },
+                calculable: true,
+                xAxis: [
+                  {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: that.xData
+                  }
+                ],
+                yAxis: [
+                  {
+                    max: that.yMax,
+                    min: that.yMin,
+                    type: 'value'
+                  }
+                ],
+                series: [
+                  {
+                    name: '当前时间段数据',
+                    type: 'line',
+                    smooth: true,
+                    data: that.yData
+                  }
+                ]
+              });
+              window.addEventListener("resize",()=>{
+                myChart.resize();
+              });
+            })
+          }
         });
       },
 
@@ -221,6 +281,7 @@
       //关闭曲线页面
       modalClose() {
         this.isHideCurve = true;
+        this.curveState = false;
         this.xData = [];
         this.yData = [];
       },
@@ -241,6 +302,8 @@
               this.yMax = res.data.Max;
               this.yMin = res.data.Min;
               this.isHideCurve = false;
+              this.curveState =true;
+
               this.drawLine();
             })
             .catch((err) => {
@@ -397,6 +460,7 @@
 
       drawLine() {
         // 基于准备好的dom，初始化echarts实例
+
         this.$nextTick(() => {
           let myChart = this.$echarts.init(document.getElementById('dataBar'));
           // 绘制图表
@@ -564,7 +628,7 @@
     position: fixed;
     bottom: 80px;
     right: 20px;
-    z-index: 999;
+    z-index: 999999;
     background-color: @color-background-d;
     cursor: pointer;
     color: @color-white;
