@@ -60,54 +60,54 @@
           </template>
         </el-table>
       </div>
+      <div v-bind:class="{hideModal:isHideCurve}">
+        <div class="modal">
+          <div class="container">
+            <div class="containerTop">
+              <div class="containerTopDiv">
+                <el-button type="danger" @click="modalClose">关闭窗口</el-button>
+              </div>
+              <div class="containerTopDiv">
+                <el-date-picker
+                  style="width: 300px"
+                  v-model="startTime"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="开始时间">
+                </el-date-picker>
+              </div>
+              <div class="containerTopDiv">
+                <el-date-picker
+                  style="width: 300px"
+                  v-model="endTime"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="结束时间">
+                </el-date-picker>
+              </div>
+              <div class="containerTopDiv">
+                <el-button type="primary" @click="doSearchData()">查询曲线</el-button>
+              </div>
+            </div>
+            <div class="containerBottom">
+              <div id="dataBar" :style="{width: '100%', height: '300px'}"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <Curve
+         :xData="xData"
+         :yData="yData"
+         :isHideCurve="isHideCurve"
+         :name="name"
+         v-on:modalClose="modalClose"
+         v-on:doSearchData="doSearchData"></Curve>-->
+      <Modal :msg="message"
+             :isHideModal="HideModal"></Modal>
     </div>
     <div class="upTop" ref="upTop" @click="upToTop">
       <i class="iconfont icon-xiangshang1"></i>
     </div>
-    <div v-bind:class="{hideModal:isHideCurve}">
-      <div class="modal">
-        <div class="container">
-          <div class="containerTop">
-            <div class="containerTopDiv">
-              <el-button type="danger" @click="modalClose">关闭窗口</el-button>
-            </div>
-            <div class="containerTopDiv">
-              <el-date-picker
-                style="width: 300px"
-                v-model="startTime"
-                type="datetime"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                placeholder="开始时间">
-              </el-date-picker>
-            </div>
-            <div class="containerTopDiv">
-              <el-date-picker
-                style="width: 300px"
-                v-model="endTime"
-                type="datetime"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                placeholder="结束时间">
-              </el-date-picker>
-            </div>
-            <div class="containerTopDiv">
-              <el-button type="primary" @click="doSearchData()">查询曲线</el-button>
-            </div>
-          </div>
-          <div class="containerBottom">
-            <div id="dataBar" :style="{width: '100%', height: '300px'}"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-   <!-- <Curve
-      :xData="xData"
-      :yData="yData"
-      :isHideCurve="isHideCurve"
-      :name="name"
-      v-on:modalClose="modalClose"
-      v-on:doSearchData="doSearchData"></Curve>-->
-    <Modal :msg="message"
-           :isHideModal="HideModal"></Modal>
     <div class="loading-container" v-show="!img">
       <loading></loading>
     </div>
@@ -159,6 +159,7 @@
       this.showUp();
       this.showSearch();
       this.bianse();
+      this.hp()
     },
     computed: {},
     created() {
@@ -188,6 +189,13 @@
             that.cols = title.data;
             that.tableData = table.data;
           }));
+      },
+
+      hp() {
+        const that = this;
+        window.addEventListener('orientationchange', function () {
+          that.drawLine();
+        });
       },
 
       //页面加载检查用户是否登陆，没有登陆就加载登陆页面
@@ -225,28 +233,15 @@
             "tag": this.tag
           }))
             .then((res) => {
-              if(res.data.xData.length>0 &&res.data.yData.length>0){
-                this.startTime="";
-                this.endTime="";
-                this.xData = res.data.xData;
-                this.yData = res.data.yData;
-                this.name = res.data.name;
-                this.yMax= res.data.Max;
-                this.yMin = res.data.Min;
-                this.isHideCurve = false;
-                this.drawLine();
-              }
-              else {
-                this.message = "该测点没有曲线";
-                this.HideModal = false;
-                const that = this;
-                function a() {
-                  that.message = "";
-                  that.HideModal = true;
-                }
-                setTimeout(a, 2000);
-              }
-
+              this.startTime = "";
+              this.endTime = "";
+              this.xData = res.data.xData;
+              this.yData = res.data.yData;
+              this.name = res.data.name;
+              this.yMax = res.data.Max;
+              this.yMin = res.data.Min;
+              this.isHideCurve = false;
+              this.drawLine();
             })
             .catch((err) => {
 
@@ -280,7 +275,7 @@
               this.xData = res.data.xData;
               this.yData = res.data.yData;
               this.name = res.data.name;
-              this.yMax= res.data.Max;
+              this.yMax = res.data.Max;
               this.yMin = res.data.Min;
               this.drawLine();
             })
@@ -502,7 +497,6 @@
     }
     .contentBottom {
       margin-bottom: 80px;
-
     }
     .modal {
       position: fixed;
@@ -527,12 +521,12 @@
         right: 0;
         background-color: @color-white;
         border-radius: 10px;
-        .containerTop{
+        .containerTop {
           display: flex;
           align-items: center;
           justify-content: center;
           flex-direction: column;
-          .containerTopDiv{
+          .containerTopDiv {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -542,13 +536,13 @@
               align-items: center;
               justify-content: center;
               width: 200px;
-              height:35px;
+              height: 35px;
               margin-right: 10%;
               margin-left: 10%;
             }
           }
         }
-        .containerBottom{
+        .containerBottom {
           margin-top: 5%;
         }
       }

@@ -7,7 +7,9 @@
     </div>
   </footer>
 </template>
-<script type="text/ecmascript-6">export default {
+<script type="text/ecmascript-6">
+  import { disableHistory } from '../assets/js/api'
+  export default {
   name: 'ga-footer',
   data() {
     return {
