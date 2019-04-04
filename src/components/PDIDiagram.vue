@@ -2,7 +2,7 @@
   <div class="template">
     <header-nav></header-nav>
     <div class="contentDiv">
-      <div class="contentTop" ref="contentTop">
+      <div class="contentTop">
         <div class="listSearch">
           <div class="containerTopDivTime">
             <el-date-picker
@@ -41,16 +41,23 @@
                   :data="tableData"
                   :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                   border
+                  :cell-style="{fontSize:'12px'}"
+                  :height="this.height"
                   highlight-current-row
                   style="width: 98%;margin: auto">
           <template v-for="(col ,index) in cols">
-            <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+            <el-table-column
+              align="center"
+              v-if="col.prop =='Name'"
+              fixed
+              width="130"
+              :prop="col.prop"
+              :label="col.label">
+            </el-table-column>
+            <el-table-column v-if="col.prop !=='Name'" align="center" :prop="col.prop" :label="col.label"></el-table-column>
           </template>
         </el-table>
       </div>
-    </div>
-    <div class="upTop" ref="upTop" @click="upToTop">
-      <i class="iconfont icon-xiangshang1"></i>
     </div>
     <Modal :msg="message"
            :isHideModal="HideModal"></Modal>
@@ -84,15 +91,14 @@
 
         tableData: [],
         cols: [],
-        time: ""
+        time: "",
+        height:Number
       }
 
     },
     components: {Loading, footerNav, Modal, headerNav},
     mounted() {
-      this.showUp();
-      this.showSearch();
-      this.bianse();
+
 
     },
     computed: {
@@ -106,12 +112,29 @@
       setTimeout(() => {
         this.getLoading();
       }, 1000);
+
+
     },
     methods: {
       //旋转的图片
       getLoading() {
         this.img = ["1"]
       },
+
+      //根据屏幕设置Table高度
+      setTableHeight(){
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+          var H = window.screen.height;
+          this.height = H - 230;
+        }
+        else {
+          var h = document.body.clientHeight;
+          this.height = h - 230;
+        }
+
+      },
+
+
       //改变数据瞬间显示数据
       loadingShowData(data) {
         let that = this;
@@ -137,6 +160,7 @@
         else {
           let that = this;
           this.time = getNowTime();
+          this.setTableHeight();
           axios.all([
             axios.post(" " + realTimeUrl + "/api/getSelectReportForm.ashx"),
           ])
@@ -186,68 +210,6 @@
         }
       },
 
-
-
-      //移动显示搜索框
-      showSearch() {
-        let search = this.$refs.contentTop;
-        let searchHight = this.$refs.contentTop.offsetHeight;
-        window.addEventListener('scroll', () => {
-          let top = window.scrollY;
-          if (top > searchHight) {
-            search.style.width = "100%";
-            search.style.position = "fixed";
-            search.style.top = 0;
-            search.style.zIndex = 999;
-          } else if (top <= searchHight) {
-            search.style.position = "";
-          }
-        })
-      },
-
-      //搜索框变色
-      bianse() {
-        let search = this.$refs.contentTop;
-        let searchHight = this.$refs.contentTop.offsetHeight;
-        window.addEventListener('scroll', () => {
-          let top = window.scrollY;
-          if (top > searchHight) {
-            search.style.background = "rgba(216, 229, 246,1)"
-          }
-          else {
-            let op = (top / searchHight) * 0.85;
-            if (op > 0) {
-              search.style.background = "rgba(216, 229, 246," + op + ")";
-            }
-            else {
-              search.style.background = "rgba(216, 229, 246,1)"
-            }
-          }
-        })
-
-      },
-
-      //显示向上按钮
-      showUp() {
-        let height = this.$refs.contentTop.offsetHeight;
-        let upTop = this.$refs.upTop;
-        window.addEventListener('scroll', () => {
-          let top = window.scrollY;
-          if (top >= height) {
-            upTop.style.display = "block"
-          }
-          else if (top < height) {
-            upTop.style.display = "none"
-          }
-        });
-
-      },
-
-      //点击向上
-      upToTop() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-      },
 
 
 
@@ -303,60 +265,6 @@
     }
     .contentBottom {
 
-    }
-
-  }
-
-  .upTop {
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    border-radius: 50%;
-    display: none;
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    z-index: 999;
-    background-color: @color-background-d;
-    cursor: pointer;
-    color: @color-white;
-    i {
-      font-size: @font-size-large-xxx;
-    }
-
-  }
-
-  .container {
-    .containerDiv {
-      width: 95%;
-      height: 70%;
-      margin: 0 auto;
-      .select {
-        width: 16%;
-        height: 50px;
-        margin-left: 0.6%;
-        .el-select {
-          width: 100%;
-          font-size: 12px;
-        }
-
-      }
-    }
-    .containerBtn {
-      height: 20%;
-      width: 95%;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .el-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 20%;
-        height: 35px;
-      }
     }
 
   }
