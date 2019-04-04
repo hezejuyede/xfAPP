@@ -16,7 +16,8 @@
       num: Number,
       navBar: [
         {"icon": "iconfont icon-shuju", "text": "数据", "url": "/"},
-        {"icon": "iconfont icon-huabanfuben", "text": "报表", "url": "/ReportForm"}
+        {"icon": "iconfont icon-huabanfuben", "text": "报表", "url": "/ReportForm"},
+        {"icon": "iconfont icon-liuchengtu", "text": "PDI图", "url": "/ReportForm"}
       ]
     }
   },
@@ -72,7 +73,7 @@
       align-items: center;
       justify-content: center;
       font-size: 14px;
-      .icon-huabanfuben,.icon-shuju {
+      .icon-huabanfuben,.icon-shuju ,.icon-liuchengtu{
         font-size: @font-size-large-xxxxxx;
       }
        span{

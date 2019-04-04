@@ -6,6 +6,7 @@ import Index from '../components/index'
 import UserLogin from '../components/login/userLogin'
 import UserRegister from '../components/login/userRegister'
 import ReportForm from '../components/reportForm'
+import PDIDiagram from '../components/PDIDiagram'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/ReportForm',
       name: 'ReportForm',
       component: ReportForm
+    },
+    {
+      path: '/PDIDiagram',
+      name: 'PDIDiagram',
+      component: PDIDiagram
     }
   ]
 })
