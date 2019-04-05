@@ -2,13 +2,13 @@
   <div class="template">
     <header-nav></header-nav>
     <div class="contentDiv" ref="contentDivHeight">
-      <div class="contentLeft">
-        <div class="contentLeftChange" @click="showHideLeft">
-          <i class="iconfont icon-xiangzuo"></i>
-        </div>
+      <div :class="{'contentLeft':this.left===true,'leftHide':this.left===false}">
         <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
       </div>
-      <div class="contentRight">
+      <div :class="{'contentRight':this.right===true,'rightMoveHome':this.right===false}">
+        <div class="contentLeftChange fl" @click="showHideLeft">
+          <i class="iconfont icon-xiangzuo"></i>
+        </div>
         <object classid="clsid:4F26B906-2854-11D1-9597-00A0C931BFC8"
                 id="Pbd1"
                 width="100%"
@@ -31,12 +31,12 @@
 <script type="text/ecmascript-6">
   import axios from 'axios'
   import realTimeUrl from '../assets/js/realTimeUrl'
+  import URL from '../assets/js/URL'
   import headerNav from '../common/header'
   import footerNav from '../common/footer'
   import Loading from '../common/loading'
   import Modal from '../common/modal'
   import qs from 'qs'
-  import {getNowTime} from '../assets/js/api'
 
   export default {
     name: 'ProductionExecution',
@@ -46,9 +46,6 @@
         HideModal: true,
         img: "",
         pdiUrl:"",
-
-
-
 
         data: [
           {
@@ -94,13 +91,12 @@
             ]
           }
         ],
-
+        left:true,
+        right:true,
         defaultProps: {
           children: 'children',
           label: 'label'
         }
-
-
       }
 
     },
@@ -120,6 +116,9 @@
       setTimeout(() => {
         this.getLoading();
       }, 1000);
+
+      //请求得到左侧树形导航
+      this.getLeftList()
 
 
     },
@@ -168,16 +167,7 @@
           this.$router.push("/userLogin")
         }
         else {
-          let that = this;
-          this.time = getNowTime();
-          axios.all([
-            axios.post(" " + realTimeUrl + "/api/getSelectReportForm.ashx"),
-          ])
-            .then(axios.spread(function (select) {
-              that.select = select.data[0].id;
-              that.selectOptions = select.data;
-              that.loadingShowData(1);
-            }));
+
         }
       },
 
@@ -187,8 +177,26 @@
       },
 
 
+      getLeftList() {
+        axios.post(" " + URL + "/api/HomeLeftNav")
+          .then((res) => {
+            console.log(res.data)
+
+          })
+          .catch((err) => {
+
+          })
+      },
+
       showHideLeft() {
-        alert("aaa")
+        if(this.left===false){
+          this.left=true;
+          this.right=true;
+        }
+        else if(this.left===true){
+          this.left=false;
+          this.right=false;
+        }
       }
 
     }
@@ -198,50 +206,61 @@
   @import "../assets/less/base";
 
   .template {
-    margin-bottom: 80px;
     overflow-x: hidden;
+    overflow-y: hidden;
     position: relative;
     .contentDiv {
       width: 100%;
       position: relative;
-      .left-hide{
-        width: 187px;
+      .leftHide{
         position: relative;
-        left: -187px;
+        left:-200px;
+        top: 0;
+        width: 200px;
+        height: 98%;
+        border: 1px solid @color-background-dd;
+        overflow-x:auto;
+        overflow-y:auto;
         transition: all 1.5s;
-        z-index: 99;
       }
-
       .contentLeft{
         position: relative;
         left:0;
         top: 0;
         width: 200px;
-        height: 99%;
+        height: 100%;
         border: 1px solid @color-background-dd;
         overflow-x:auto;
         overflow-y:auto;
-        background-color: #d93f30;
         transition: all 1.5s;
 
       }
-
       .contentRight{
         position:absolute;;
         top: 0;
         left: 200px;
-        height: 99%;
-        width: 100%;
-        background-color: #00CCFF;
+        height: 100%;
+        width: 99%;
         transition: all 1.5s;
       }
-
       .rightMoveHome{
+        position:absolute;;
+        top: 0;
+        left:0;
+        height: 100%;
         width: 100%;
-        position: absolute;
-        top:80px;
-        left:200px;
         transition: all 1.5s;
+      }
+      .contentLeftChange{
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: @color-bg-lv;
+        color: @color-white;
+        border-radius: 50%;
+        margin: 10px;
+        cursor: pointer;
       }
     }
   }
