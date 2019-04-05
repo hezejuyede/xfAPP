@@ -1,62 +1,11 @@
 <template>
   <div class="template">
     <header-nav></header-nav>
-    <div class="contentDiv">
-      <div class="contentTop">
-        <div class="listSearch">
-          <div class="containerTopDivTime">
-            <el-date-picker
-              style="width: 100%"
-              v-model="time"
-              type="date"
-              value-format="yyyy-MM-dd"
-              placeholder="查询日期">
-            </el-date-picker>
-          </div>
-          <div class="containerTopDivSelect">
-            <el-select
-              style="width: 90%"
-              v-model="select"
-              clearable
-              filterable
-              allow-create
-              default-first-option
-              @change="changeSelect"
-              placeholder="报表名">
-              <el-option
-                v-for="item in selectOptions"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="containerTopDivBtn">
-            <el-button type="success" @click="doSearch">查询</el-button>
-          </div>
-        </div>
+    <div class="contentDiv" ref="contentDivHeight">
+      <div class="contentLeft">
+        <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
       </div>
-      <div class="contentBottom">
-        <el-table class="tb-edit"
-                  :data="tableData"
-                  :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
-                  border
-                  :cell-style="{fontSize:'12px'}"
-                  :height="this.height"
-                  highlight-current-row
-                  style="width: 98%;margin: auto">
-          <template v-for="(col ,index) in cols">
-            <el-table-column
-              align="center"
-              v-if="col.prop =='Name'"
-              fixed
-              width="130"
-              :prop="col.prop"
-              :label="col.label">
-            </el-table-column>
-            <el-table-column v-if="col.prop !=='Name'" align="center" :prop="col.prop" :label="col.label"></el-table-column>
-          </template>
-        </el-table>
+      <div class="contentRight">
       </div>
     </div>
     <Modal :msg="message"
@@ -83,22 +32,63 @@
       return {
         message: '',
         HideModal: true,
-
         img: "",
 
-        select: "",
-        selectOptions: [],
+        data: [
+          {
+            label: '一级 1',
+            children: [{
+              label: '二级 1-1',
+              children: [{
+                label: '三级 1-1-1'
+              }]
+            }]
+          },
+          {
+            label: '一级 2',
+            children: [{
+              label: '二级 2-1',
+              children: [{
+                label: '三级 2-1-1'
+              }]
+            }, {
+              label: '二级 2-2',
+              children: [{
+                label: '三级 2-2-1'
+              }]
+            }]
+          },
+          {
+            label: '一级 3',
+            children: [
+              {
+                label: '二级 3-1',
+                children: [{
+                  label: '三级 3-1-1'
+                }]
+              },
+              {
+                label: '二级 3-2',
+                children: [{
+                  label: '三级 3-2-1'
+                }]
+              }
+            ]
+          }
+        ],
 
-        tableData: [],
-        cols: [],
-        time: "",
-        height:Number
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
+
+
       }
 
     },
     components: {Loading, footerNav, Modal, headerNav},
     mounted() {
-
+      this.setTableHeight();
 
     },
     computed: {
@@ -122,14 +112,16 @@
       },
 
       //根据屏幕设置Table高度
-      setTableHeight(){
+      setTableHeight() {
         if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
           var H = window.screen.height;
-          this.height = H - 230;
+          let div = this.$refs.contentDivHeight;
+          div.style.height = H - 150 + "px";
         }
         else {
           var h = document.body.clientHeight;
-          this.height = h - 230;
+          let div = this.$refs.contentDivHeight;
+          div.style.height = h - 150 + "px";
         }
 
       },
@@ -160,7 +152,6 @@
         else {
           let that = this;
           this.time = getNowTime();
-          this.setTableHeight();
           axios.all([
             axios.post(" " + realTimeUrl + "/api/getSelectReportForm.ashx"),
           ])
@@ -173,43 +164,9 @@
       },
 
 
-      //改变下拉显示数据
-      changeSelect() {
-        if (this.select && this.time ) {
-          this.loadingShowData(this.select,this.time)
-        }
-        else {
-          this.message = "时间和下拉不能为空";
-          this.HideModal = false;
-          const that = this;
-
-          function a() {
-            that.message = "";
-            that.HideModal = true;
-          }
-
-          setTimeout(a, 2000);
-
-        }
-      },
-
-      //进行查询
-      doSearch() {
-        if (this.select && this.time) {
-          this.loadingShowData(this.select,this.time)
-        }
-        else {
-          this.message = "下拉选择不能为空";
-          this.HideModal = false;
-          const that = this;
-          function a() {
-            that.message = "";
-            that.HideModal = true;
-          }
-          setTimeout(a, 2000);
-        }
-      },
-
+      handleNodeClick(data) {
+        console.log(data);
+      }
 
 
 
@@ -222,51 +179,9 @@
 
   .template {
     margin-bottom: 80px;
-    .contentTop {
+    .contentDiv {
       width: 100%;
-      background-color: #D8E5F6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      .listSearch {
-        width: 95%;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .containerTopDivTime{
-          flex: 1.5;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .containerTopDivSelect{
-          flex: 1.1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .containerTopDivBtn{
-          flex: 0.7;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          .el-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 95%;
-            height: 35px;
-            margin-left: 2%;
-          }
-        }
-      }
     }
-    .contentBottom {
-
-    }
-
   }
 
   .loading-container {

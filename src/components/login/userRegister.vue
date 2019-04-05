@@ -217,6 +217,7 @@
                 function a() {
                   that.message = "";
                   that.HideModal = true;
+                  localStorage.setItem("IndexUrl", 0);
                   that.$router.push({path: "/"})
                 }
 
