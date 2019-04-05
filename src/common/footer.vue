@@ -17,7 +17,7 @@
       navBar: [
         {"icon": "iconfont icon-shuju", "text": "数据", "url": "/"},
         {"icon": "iconfont icon-huabanfuben", "text": "报表", "url": "/ReportForm"},
-        {"icon": "iconfont icon-liuchengtu", "text": "PDI图", "url": "/PDIDiagram"}
+        {"icon": "iconfont icon-liuchengtu", "text": "流程图", "url": "/PDIDiagram"}
       ]
     }
   },

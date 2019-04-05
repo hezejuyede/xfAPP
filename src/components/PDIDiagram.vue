@@ -3,9 +3,21 @@
     <header-nav></header-nav>
     <div class="contentDiv" ref="contentDivHeight">
       <div class="contentLeft">
+        <div class="contentLeftChange" @click="showHideLeft">
+          <i class="iconfont icon-xiangzuo"></i>
+        </div>
         <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
       </div>
       <div class="contentRight">
+        <object classid="clsid:4F26B906-2854-11D1-9597-00A0C931BFC8"
+                id="Pbd1"
+                width="100%"
+                height="100%">
+          <param name="_cx" value="24262">
+          <param name="_cy" value="16140">
+          <param name="ServerIniURL" value>
+          <param name="DisplayURL" :value="pdiUrl">
+        </object>
       </div>
     </div>
     <Modal :msg="message"
@@ -33,16 +45,22 @@
         message: '',
         HideModal: true,
         img: "",
+        pdiUrl:"",
+
+
+
 
         data: [
           {
             label: '一级 1',
-            children: [{
-              label: '二级 1-1',
-              children: [{
-                label: '三级 1-1-1'
-              }]
-            }]
+            children: [
+              {
+                label: '二级 1-1',
+                children: [
+                  {label: '三级 1-1-1'}
+                ]
+              }
+              ]
           },
           {
             label: '一级 2',
@@ -166,10 +184,12 @@
 
       handleNodeClick(data) {
         console.log(data);
+      },
+
+
+      showHideLeft() {
+        alert("aaa")
       }
-
-
-
 
     }
   }
@@ -179,8 +199,50 @@
 
   .template {
     margin-bottom: 80px;
+    overflow-x: hidden;
+    position: relative;
     .contentDiv {
       width: 100%;
+      position: relative;
+      .left-hide{
+        width: 187px;
+        position: relative;
+        left: -187px;
+        transition: all 1.5s;
+        z-index: 99;
+      }
+
+      .contentLeft{
+        position: relative;
+        left:0;
+        top: 0;
+        width: 200px;
+        height: 99%;
+        border: 1px solid @color-background-dd;
+        overflow-x:auto;
+        overflow-y:auto;
+        background-color: #d93f30;
+        transition: all 1.5s;
+
+      }
+
+      .contentRight{
+        position:absolute;;
+        top: 0;
+        left: 200px;
+        height: 99%;
+        width: 100%;
+        background-color: #00CCFF;
+        transition: all 1.5s;
+      }
+
+      .rightMoveHome{
+        width: 100%;
+        position: absolute;
+        top:80px;
+        left:200px;
+        transition: all 1.5s;
+      }
     }
   }
 

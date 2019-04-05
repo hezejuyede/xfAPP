@@ -1,10 +1,10 @@
 <template>
     <div class="headerCommon clearfix">
       <div class="header-left fl">
-        <div class="collapse-btn">
+        <div class="collapse-btn fl">
           <i class="el-icon-menu"></i>
         </div>
-        <div class="logo">{{headerTitle}}</div>
+        <div class="logo fl">{{headerTitle}}</div>
       </div>
       <div class="header-right fl" >
         <div class="headerOut fr" @click="LeavePost">
@@ -110,11 +110,10 @@
     box-sizing: border-box;
     background-color: #66B1FF;
     .header-left {
-      width: 50%;
+      width: 45%;
       height: 70px;
+      line-height: 70px;
       padding-left: 5%;
-      display: flex;
-      align-items: center;
       font-size: @font-size-large-xx;
       color: @color-white;
     }
@@ -225,7 +224,6 @@
     }
 
   }
-
   @media only screen and (max-width:540px) {
     .headerCommon {
       .header-left {
@@ -245,7 +243,6 @@
     }
 
   }
-
   @media only screen and (max-width:410px) {
     .headerCommon {
       .header-left {
