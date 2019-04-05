@@ -3,21 +3,24 @@
     <header-nav></header-nav>
     <div class="contentDiv" ref="contentDivHeight">
       <div :class="{'contentLeft':this.left===true,'leftHide':this.left===false}">
-        <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+        <div class="contentLefTop">监控选择区</div>
+        <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" ref="tree"></el-tree>
       </div>
       <div :class="{'contentRight':this.right===true,'rightMoveHome':this.right===false}">
         <div class="contentLeftChange fl" @click="showHideLeft">
           <i class="iconfont icon-xiangzuo"></i>
         </div>
-        <object classid="clsid:4F26B906-2854-11D1-9597-00A0C931BFC8"
-                id="Pbd1"
-                width="100%"
-                height="100%">
-          <param name="_cx" value="24262">
-          <param name="_cy" value="16140">
-          <param name="ServerIniURL" value>
-          <param name="DisplayURL" :value="pdiUrl">
-        </object>
+        <div class="" id="iframe">
+          <object classid="clsid:4F26B906-2854-11D1-9597-00A0C931BFC8"
+                  id="Pbd1"
+                  width="100%"
+                  height="100%">
+            <param name="_cx" value="24262">
+            <param name="_cy" value="16140">
+            <param name="ServerIniURL" value>
+            <param name="DisplayURL" :value="changeUrl">
+          </object>
+        </div>
       </div>
     </div>
     <Modal :msg="message"
@@ -31,13 +34,12 @@
 <script type="text/ecmascript-6">
   import axios from 'axios'
   import realTimeUrl from '../assets/js/realTimeUrl'
-  import URL from '../assets/js/URL'
   import headerNav from '../common/header'
   import footerNav from '../common/footer'
   import Loading from '../common/loading'
   import Modal from '../common/modal'
   import qs from 'qs'
-
+  import $ from 'jquery'
   export default {
     name: 'ProductionExecution',
     data() {
@@ -46,51 +48,9 @@
         HideModal: true,
         img: "",
         pdiUrl:"",
+        changeUrl:"",
 
-        data: [
-          {
-            label: '一级 1',
-            children: [
-              {
-                label: '二级 1-1',
-                children: [
-                  {label: '三级 1-1-1'}
-                ]
-              }
-              ]
-          },
-          {
-            label: '一级 2',
-            children: [{
-              label: '二级 2-1',
-              children: [{
-                label: '三级 2-1-1'
-              }]
-            }, {
-              label: '二级 2-2',
-              children: [{
-                label: '三级 2-2-1'
-              }]
-            }]
-          },
-          {
-            label: '一级 3',
-            children: [
-              {
-                label: '二级 3-1',
-                children: [{
-                  label: '三级 3-1-1'
-                }]
-              },
-              {
-                label: '二级 3-2',
-                children: [{
-                  label: '三级 3-2-1'
-                }]
-              }
-            ]
-          }
-        ],
+        data: [],
         left:true,
         right:true,
         defaultProps: {
@@ -167,27 +127,55 @@
           this.$router.push("/userLogin")
         }
         else {
+          var IP = window.location.host;
+          this.pdiUrl = IP.substring(0, IP.length - 5);
+          var URL = localStorage.getItem("URL");
+          var u = JSON.parse(URL);
+          var url = encodeURI(u);
+          if (URL == null || URL === "") {
+            this.changeUrl = " "+ this.pdiUrl +"/piweb/YWGA/001.PDI";
+            $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='"+ this.changeUrl +"'></object>")
+          }
+          else {
+            this.changeUrl = " "+ this.pdiUrl +"/piweb/YWGA/" + url + ".PDI";
+            $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='"+  this.changeUrl +"'></object>")
+          }
+
+
+
 
         }
       },
 
 
+      //点击树形控件后执行的方法
       handleNodeClick(data) {
-        console.log(data);
+        if (data.children === null) {
+
+          var URL = data.label;
+          URL = JSON.stringify(URL);
+          localStorage.setItem("URL", URL);
+          var url = localStorage.getItem("URL", URL);
+          var u = JSON.parse(url);
+          url = encodeURI(u);
+          this.changeUrl = " "+ this.pdiUrl +"/piweb/YWGA/" + url + ".PDI";
+          $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='"+ this.changeUrl +"'></object>")
+        }
       },
 
 
+      //请求左侧树形列表
       getLeftList() {
-        axios.post(" " + URL + "/api/HomeLeftNav")
+        axios.post(" " + realTimeUrl + "/api/GetMenus.ashx")
           .then((res) => {
-            console.log(res.data)
-
+            this.data = res.data
           })
           .catch((err) => {
-
+            console.log(err)
           })
       },
 
+      //左侧树形控件显示与隐藏
       showHideLeft() {
         if(this.left===false){
           this.left=true;
@@ -197,7 +185,7 @@
           this.left=false;
           this.right=false;
         }
-      }
+      },
 
     }
   }
@@ -261,6 +249,11 @@
         border-radius: 50%;
         margin: 10px;
         cursor: pointer;
+      }
+      .contentLefTop{
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
       }
     }
   }
