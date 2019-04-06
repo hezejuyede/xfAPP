@@ -127,8 +127,9 @@
           this.$router.push("/userLogin")
         }
         else {
-          let IP = window.location.host;
-          this.pdiUrl = IP.substring(0, IP.length - 5);
+         /* let IP = window.location.host;
+          this.pdiUrl = IP.substring(0, IP.length - 5);*/
+          this.pdiUrl= window.location.host;
           let URL = localStorage.getItem("URL");
           let u = JSON.parse(URL);
           let url = encodeURI(u);
@@ -137,7 +138,7 @@
             $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='"+ this.changeUrl +"'></object>")
           }
           else {
-            this.changeUrl = " "+ this.pdiUrl +"/piweb/YWGA/" + url + ".PDI";
+            this.changeUrl = " "+ this.pdiUrl +"/piweb/" + url + ".PDI";
             $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='"+  this.changeUrl +"'></object>")
           }
 
