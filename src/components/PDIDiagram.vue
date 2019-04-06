@@ -10,7 +10,7 @@
         <div class="contentLeftChange fl" @click="showHideLeft">
           <i class="iconfont icon-xiangzuo"></i>
         </div>
-        <div class="" id="iframe">
+        <div class="contentLeftChangPdi fl" id="iframe">
           <object classid="clsid:4F26B906-2854-11D1-9597-00A0C931BFC8"
                   id="Pbd1"
                   width="100%"
@@ -127,13 +127,13 @@
           this.$router.push("/userLogin")
         }
         else {
-          var IP = window.location.host;
+          let IP = window.location.host;
           this.pdiUrl = IP.substring(0, IP.length - 5);
-          var URL = localStorage.getItem("URL");
-          var u = JSON.parse(URL);
-          var url = encodeURI(u);
+          let URL = localStorage.getItem("URL");
+          let u = JSON.parse(URL);
+          let url = encodeURI(u);
           if (URL == null || URL === "") {
-            this.changeUrl = " "+ this.pdiUrl +"/piweb/YWGA/001.PDI";
+            this.changeUrl = " "+ this.pdiUrl +"/piweb/001.PDI";
             $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='"+ this.changeUrl +"'></object>")
           }
           else {
@@ -151,15 +151,14 @@
       //点击树形控件后执行的方法
       handleNodeClick(data) {
         if (data.children === null) {
-
-          var URL = data.label;
+          let URL = data.PathName;
           URL = JSON.stringify(URL);
           localStorage.setItem("URL", URL);
-          var url = localStorage.getItem("URL", URL);
-          var u = JSON.parse(url);
+          let url = localStorage.getItem("URL", URL);
+          let u = JSON.parse(url);
           url = encodeURI(u);
-          this.changeUrl = " "+ this.pdiUrl +"/piweb/YWGA/" + url + ".PDI";
-          $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='"+ this.changeUrl +"'></object>")
+          this.changeUrl = " " + this.pdiUrl + "/piweb/" + url + ".PDI";
+          $("#iframe").html("<object classid=\"clsid:4F26B906-2854-11D1-9597-00A0C931BFC8\" id=\"Pbd1\" width=\"100%\" height=\"100%\"><param name=\"_cx\" value=\"24262\"><param name=\"_cy\" value=\"16140\"><param name=\"ServerIniURL\" value><param name=\"DisplayURL\" value='" + this.changeUrl + "'></object>")
         }
       },
 
@@ -243,17 +242,22 @@
         width: 30px;
         height: 30px;
         line-height: 30px;
+        margin: 5px;
         text-align: center;
         background-color: @color-bg-lv;
         color: @color-white;
         border-radius: 50%;
-        margin: 10px;
         cursor: pointer;
       }
+      .contentLeftChangPdi{
+        width: 100%;
+        height: 100%;
+      }
       .contentLefTop{
-        height: 30px;
+        height: 40px;
         text-align: center;
-        line-height: 30px;
+        line-height: 40px;
+        font-size: @font-size-large;
       }
     }
   }
