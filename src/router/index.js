@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 
 import Index from '../components/index'
+import RealTimeData from '../components/realTimeData'
 import UserLogin from '../components/login/userLogin'
 import UserRegister from '../components/login/userRegister'
 import ReportForm from '../components/reportForm'
@@ -26,6 +27,11 @@ export default new Router({
       path: '/UserRegister',
       name: 'UserRegister',
       component: UserRegister
+    },
+    {
+      path: '/RealTimeData',
+      name: 'RealTimeData',
+      component: RealTimeData
     },
     {
       path: '/ReportForm',
