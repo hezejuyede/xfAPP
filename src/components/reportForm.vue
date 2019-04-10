@@ -153,7 +153,7 @@
 
       //页面加载检查用户是否登陆，没有登陆就加载登陆页面
       getAdminState() {
-        const userInfo = sessionStorage.getItem("userInfo");
+        const userInfo = localStorage.getItem("userInfo");
         if (userInfo === null) {
           this.$router.push("/userLogin")
         }

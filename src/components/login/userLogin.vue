@@ -155,7 +155,7 @@
                 localStorage.setItem('loginMessage', loginMessage);
                 let userInfo = res.data;
                 userInfo = JSON.stringify(userInfo);
-                sessionStorage.setItem("userInfo", userInfo);
+                localStorage.setItem("userInfo", userInfo);
                 this.message = "登录成功";
 
 

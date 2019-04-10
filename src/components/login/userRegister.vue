@@ -209,7 +209,7 @@
               if (res.data.state === "1") {
                 let userInfo = res.data;
                 userInfo = JSON.stringify(userInfo);
-                sessionStorage.setItem("userInfo", userInfo);
+                localStorage.setItem("userInfo", userInfo);
                 this.message = "注册成功";
                 this.HideModal = false;
                 const that = this;

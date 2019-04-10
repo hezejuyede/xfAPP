@@ -73,11 +73,25 @@
     mounted() {
     },
     created() {
+      this.getAdminState()
       setTimeout(() => {
         this.getLoading();
       }, 1000);
     },
     methods: {
+      //页面加载检查用户是否登陆，没有登陆就加载登陆页面
+      getAdminState() {
+        const userInfo = localStorage.getItem("userInfo");
+        if (userInfo === null) {
+          this.$router.push("/UserLogin")
+        }
+        else {
+
+        }
+      },
+
+
+
       getLoading() {
         this.img = ["1"]
       },
