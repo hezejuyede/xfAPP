@@ -15,8 +15,9 @@
     return {
       num: Number,
       navBar: [
-        {"icon": "iconfont icon-shuju", "text": "数据", "url": "/"},
-        {"icon": "iconfont icon-huabanfuben", "text": "报表", "url": "/ReportForm"},
+        {"icon": "iconfont icon-xiazai45", "text": "首页", "url": "/"},
+        {"icon": "iconfont icon-shujufenxi", "text": "数据", "url": "/RealTimeData"},
+        {"icon": "iconfont icon-report", "text": "报表", "url": "/ReportForm"},
         {"icon": "iconfont icon-liuchengtu", "text": "流程图", "url": "/PDIDiagram"}
       ]
     }
@@ -73,8 +74,8 @@
       align-items: center;
       justify-content: center;
       font-size: 14px;
-      .icon-huabanfuben,.icon-shuju ,.icon-liuchengtu{
-        font-size: @font-size-large-xxxxxx;
+      .icon-report,.icon-shujufenxi ,.icon-liuchengtu ,.icon-xiazai45{
+        font-size: @font-size-large-xxx;
       }
        span{
          font-size: @font-size-large;
