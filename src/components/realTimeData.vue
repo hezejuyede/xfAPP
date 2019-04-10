@@ -414,9 +414,7 @@
       //页面加载检查用户是否登陆，没有登陆就加载登陆页面
       getAdminState() {
         const userInfo = localStorage.getItem("userInfo");
-
         if (userInfo === null) {
-          console.log(userInfo)
           this.$router.push("/UserLogin")
         }
         else {

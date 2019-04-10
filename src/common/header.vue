@@ -49,7 +49,7 @@
     methods: {
       //页面加载检查用户是否登陆，没有登陆就加载登陆页面
       getAdminState() {
-        const userInfo = sessionStorage.getItem("userInfo");
+        const userInfo = localStorage.getItem("userInfo");
         const info = JSON.parse(userInfo);
         if (info === null) {
           this.$router.push("/userLogin")
@@ -75,7 +75,7 @@
                   });
                   setTimeout(() => {
                     localStorage.setItem("IndexUrl", 0);
-                    sessionStorage.removeItem("userInfo");
+                    localStorage.removeItem("userInfo");
                     this.$router.push("/userLogin");
                   }, 3000);
                 }

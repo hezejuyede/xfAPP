@@ -155,7 +155,7 @@
       getAdminState() {
         const userInfo = localStorage.getItem("userInfo");
         if (userInfo === null) {
-          this.$router.push("/userLogin")
+          this.$router.push("/UserLogin")
         }
         else {
           let that = this;
